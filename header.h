@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <errno.h>
+#include <time.h>
 
 #define ARGS_NUM 9
 
@@ -13,6 +14,8 @@ double Pipi = M_PI * M_PI; // Pipi = Pi * Pi
 
 void print_errno(void);
 void getParams(int argc, char* argv[], FILE *fp);
-double f(double x, double y);
-void u(int i, int j, double **u, double **f);
+//double f(double x, double y);
+//void u(int i, int j, double **u, double **f);
 double residueNorm(double *r);
+double timestamp(void);
+//void sor(double *A, double *b, double *x, double w);
