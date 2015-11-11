@@ -119,53 +119,6 @@ double residueNorm(double *r) {
 	return sqrt(res);
 }
 
-void generate_matrix(double *A, double *b) {
-	int i,j;
-	for(i=0; i<N*N; ++i) {
-		A[i] = 0;
-	}
-	for(i=0; i<N; ++i) {
-		for(j=0; j<N; ++j) {
-			if(i == j)
-				A[in(i,j)] = -4;
-		}
-	}
-	A[in(0,1)] = 1;
-	A[in(0,3)] = 1;
-	A[in(1,0)] = 1;
-	A[in(1,2)] = 1;
-	A[in(1,4)] = 1;
-	A[in(2,1)] = 1;
-	A[in(2,5)] = 1;
-	A[in(3,0)] = 1;
-	A[in(3,4)] = 1;
-	A[in(3,6)] = 1;
-	A[in(4,1)] = 1;
-	A[in(4,3)] = 1;
-	A[in(4,5)] = 1;
-	A[in(4,7)] = 1;
-	A[in(5,2)] = 1;
-	A[in(5,4)] = 1;
-	A[in(5,8)] = 1;
-	A[in(6,3)] = 1;
-	A[in(6,7)] = 1;
-	A[in(7,4)] = 1;
-	A[in(7,6)] = 1;
-	A[in(7,8)] = 1;
-	A[in(8,5)] = 1;
-	A[in(8,7)] = 1;
-	b[0] = -100;
-	b[1] = -20;
-	b[2] = -20;
-	b[3] = -80;
-	b[4] = 0;
-	b[5] = 0;
-	b[6] = -260;
-	b[7] = -180;
-	b[8] = -180;
-}
-
-
 /*
 a11 * x1 + a12 * x2 + a13 * x3 = b1 -> x1 = (b1 - (a12 * x2 + a13 * x3)) / a11
 x1 = u11;
@@ -177,7 +130,6 @@ x6 = u23;
 
 Res[1] = b1 - (a11 * x1 + a12 * x2 + a13 * x3)
 */
-
 
 void sor(double *b, double *x, double *r, double *timeSor, double *timeResNorm) {
 	int i,j,k; // Ax = b -> ?u = f
@@ -233,10 +185,8 @@ int main(int argc, char *argv[]) {
 	//double *A = calloc(sizeof(double), Nx * Ny * Nx * Ny);
 	double *b, *x, *r, *timeSor, *timeResNorm;
 
-	//generate_matrix(A,b);
-
 	b = malloc(Nx * Ny * sizeof(double));
-	x = malloc(Nx * Ny * sizeof(double));
+	x = malloc((Nx + 2) * (Ny + 2) * sizeof(double));
 	r = malloc(MaxI * sizeof(double));
 	timeSor = calloc(1,sizeof(double));
 	timeResNorm = calloc(1,sizeof(double));
@@ -246,6 +196,14 @@ int main(int argc, char *argv[]) {
 		A[ in(i,0) ] = sin(2 * M_PI * (M_PI - (i * Hx))) * sigma;
 		A[ in(i,Nx) ] = sin(2 * M_PI * (i * Hx));
 	}*/
+
+	// Creating borders
+	for(i=0; i<Nx; i++) {
+		x[ in(i,0) ] = sin(2 * M_PI * (M_PI - (i * Hx))) * sigma;
+		x[ in(i,Nx+1) ] = sin(2 * M_PI * (i * Hx));
+	}
+
+	//for(i=0; i<Nx+2; i++)
 
 	//print_matrix(A);
 
