@@ -178,7 +178,8 @@ int main(int argc, char *argv[]) {
 	Ny = (M_PI/Hy);
 	Nx++;
 	Ny++;
-	W = (2 - (Hx + Hy)) / 2;
+	//W = (2 - (Hx + Hy)) / 2;
+	W = 1; // Ou 1.3
 	UDivisor = (2 / Hx * Hx) + (2 / Hy * Hy) + 4 * Pipi;
 
 	double sigma;
