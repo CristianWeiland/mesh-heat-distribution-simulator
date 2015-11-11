@@ -261,3 +261,47 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
+
+/*
+u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
+         --------------------------------------------------------------------------------------------------------------------
+                                                          2/Δx² + 2/Δy² + 4π²
+
+
+Formato:
+
+Ax = B
+
+A [a11 a12 a13] * X [x1] = B [b1] -> a11*x1 + a12*x2 + a13*x3 = b1 -> x1 = (b1 - a12*x2 - a13*x3)/a11
+  [a21 a22 a23]     [x2]     [b2] -> a11*x1 + a12*x2 + a13*x3 = b2 -> x2 = (b2 - a11*x1 - a13*x3)/a12
+  [a31 a32 a33]     [x3]     [b3] -> a11*x1 + a12*x2 + a13*x3 = b3 -> x3 = (b3 - a11*x1 - a12*x2)/a13
+
+se x1 = u(1,1), sei calcular x1 da forma double u(int i, int j) {}
+Mesmo vale pra x2 e x3. E valeria pra x4, x5, x6, etc.
+
+
+Se u for uma matriz de 6 elementos. Ou seja, Hx = 0.25 e Hy = 0.3
+
+u  u   u   u
+u  x5  x6  u
+u  x3  x4  u
+u  x1  x2  u
+u  u   u   u
+
+5 linhas, 4 colunas.
+Ny = 3, Nx = 2.
+
+x1 = u11
+x2 = u12
+x3 = u13
+x4 = u21
+x5 = u22
+x6 = u23
+
+Matriz A, olhando pela equação u(i,j) obtida, seria algo assim:
+A = [1        ]
+    [  1      ]
+    [    1    ]
+    [      1  ]
+    [        1]
+*/
