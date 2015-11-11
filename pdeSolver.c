@@ -7,9 +7,6 @@ u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-
 
 */
 
-//#define MAX_SIZE 100000000 // 100 MB.
-//int inMemory = 0;
-
 void print_errno(void) {
     printf("%s",strerror(errno));
 }
@@ -70,33 +67,13 @@ int main(int argc, char *argv[]) {
 	getParams(argc,argv,fpExit);
 
 	Nx = (1/Hx);
+    Nx++;
 	Ny = (1/Hy);
-	Nx++;
 	Ny++;
-	if(Nx != Ny) {
-		puts("Not a square matrix. Result will be undetermined or impossible.");
-		exit(-1);
-	}
 	W = (2 - (Hx + Hy)) / 2;
-	if(W < 1) {
-		puts("Relaxation factor less than 1 - program may not work as you expect.");
-	}
 	UDivisor = (2 / Hx * Hx) + (2 / Hy * Hy) + 4 * Pipi;
-	/*if((Nx * Ny * 8) <= MAX_SIZE) { // Should we save a matrix with f(x,y) values?
-		inMemory = 1;
-	}*/
 
 	double sigma;
-	//double **u,**f;
-
-	/*for(i=0; i<Nx; i++) {
-		for(j=0; i<Ny; i++) {
-			u[i][j] = calloc(sizeof(double));
-			f[i][j] = malloc(sizeof(double));
-			f[i][j] = f(i*Hx,j*Hy);
-		}
-	}*/
-
 	double *u = calloc(sizeof(double), Nx * Ny);
 
 	sigma = sinh(M_PI * M_PI);
@@ -107,14 +84,12 @@ int main(int argc, char *argv[]) {
 
 	// Nx columns and Ny rows.
 
-	/*for(k=0; k<MaxI; k++) {
+	/* // SOR
+    for(k=0; k<MaxI; k++) {
 		for(i=1; i<Ny; i++) {
 			sigma = 0;
 			for(j=1; j<Nx; j++) {
-				/*if(j != i) {
-					sigma += a[i][j] * fi[i];
-				}*/
-				/*sigma += a[i][j] * fi[i];
+				sigma += a[i][j] * fi[i];
 			}
 			sigma -= a[i][i] * fi[i];
 			//fi[i] = (1 - W) * fi[i] + W/a[i][i] * (b[i] - sigma);
@@ -124,3 +99,47 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
+
+/*
+u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
+         --------------------------------------------------------------------------------------------------------------------
+                                                          2/Δx² + 2/Δy² + 4π²
+
+
+Formato:
+
+Ax = B
+
+A [a11 a12 a13] * X [x1] = B [b1] -> a11*x1 + a12*x2 + a13*x3 = b1 -> x1 = (b1 - a12*x2 - a13*x3)/a11
+  [a21 a22 a23]     [x2]     [b2] -> a11*x1 + a12*x2 + a13*x3 = b2 -> x2 = (b2 - a11*x1 - a13*x3)/a12
+  [a31 a32 a33]     [x3]     [b3] -> a11*x1 + a12*x2 + a13*x3 = b3 -> x3 = (b3 - a11*x1 - a12*x2)/a13
+
+se x1 = u(1,1), sei calcular x1 da forma double u(int i, int j) {}
+Mesmo vale pra x2 e x3. E valeria pra x4, x5, x6, etc.
+
+
+Se u for uma matriz de 6 elementos. Ou seja, Hx = 0.25 e Hy = 0.3
+
+u  u   u   u
+u  x5  x6  u
+u  x3  x4  u
+u  x1  x2  u
+u  u   u   u
+
+5 linhas, 4 colunas.
+Ny = 3, Nx = 2.
+
+x1 = u11
+x2 = u12
+x3 = u13
+x4 = u21
+x5 = u22
+x6 = u23
+
+Matriz A, olhando pela equação u(i,j) obtida, seria algo assim:
+A = [1        ]
+    [  1      ]
+    [    1    ]
+    [      1  ]
+    [        1]
+*/
