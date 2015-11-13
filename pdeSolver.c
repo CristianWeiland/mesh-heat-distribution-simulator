@@ -4,7 +4,7 @@
 u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
          --------------------------------------------------------------------------------------------------------------------
                                                           2/Δx² + 2/Δy² + 4π²
-Resíduo:
+Residue:
 f(x,y) = (2/Δx² + 2/Δy² + 4π²) * u(i,j) - ((u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy)
 */
 
@@ -33,10 +33,6 @@ double timestamp(void) {
     return((double)(tp.tv_sec + tp.tv_usec/1000000.0));
 }
 
-void print_errno(void) {
-    printf("%s",strerror(errno));
-}
-
 void getParams(int argc, char* argv[], FILE **fp) {
     if(argc != ARGS_NUM) {
         fprintf(stderr,"Wrong number of arguments.\n");
@@ -59,14 +55,13 @@ void getParams(int argc, char* argv[], FILE **fp) {
     }
 }
 
-double f(int n) { // If stored in memory, it will need Nx * Ny * 8 bytes of memory. Should we do it?
+double f(int n) {
 	int i = n / Nx, j = n % Nx;
 	double x = i * Hx, y = j * Hy;
-	return 4 * M_PI * ( ( sin(2 * M_PI * x) ) * ( sinh(M_PI * y) ) + ( sin(2 * Pipi - M_PI * x) ) * ( sinh(Pipi - M_PI * y) ));
+	return (4 * M_PI * ( ( sin(2 * M_PI * x) ) * ( sinh(M_PI * y) ) + ( sin(2 * Pipi - M_PI * x) ) * ( sinh(Pipi - M_PI * y) )));
 }
 
-inline int in(int i, int j) {
-// Calculate vector index, like its a matrix.
+inline int in(int i, int j) { // Calculate vector index, like its a matrix.
 	return i*Ny + j;
 }
 
@@ -92,29 +87,27 @@ double subsRow(int n, double *u) {
 }
 
 void sor(double *b, double *x, double *r, double *timeSor, double *timeResNorm) {
-	int i,j,k; // Ax = b -> ?u = f
+	int i,j,k;
 	double sigma, now, fxy, res, maxRes = 0, tRes = 0; // maxRes is the biggest residue, tRes is total residue in this iteration.
-	for(k=0; k<MaxI; k++) {
-		now = timestamp();
-		for(i = 1 + Ny; i < Nx * Ny - Ny - 1; ++i) { // Start at u[1][1], which means u[Ny+1]
+	for(k=0; k<MaxI; k++) { // Iterate MaxI times.
+		now = timestamp(); // Starting iteration time counter.
+		for(i = 1 + Ny; i < Nx * Ny - Ny - 1; ++i) { // Start at u[1][1], which means u[Ny+1] and do not calculate last row/column (they are borders)
 			x[i] = x[i] + W * (calcU(i,x) - x[i]);
 		}
-		*timeSor += timestamp() - now;
-		now = timestamp();
-		printf("Res = %lf - ",res);
+		*timeSor += timestamp() - now; // Get iteration time.
+		now = timestamp(); // Start residue norm time counter.
 		for(i = 1 + Ny; i < Nx * Ny - Ny - 1; ++i) {
-			res = f(i);
-			res -= subsRow(i,x);
+			res = f(i); // res = f(x,y)
+			res -= subsRow(i,x); // res = f(x,y) - (a0 * x0 + a1 * x1 + ... + an * xn)
 			if(res > maxRes)
 				maxRes = res;
-			tRes += res * res;
+			tRes += res * res; // Adds res² to the total residue of this iteration.
 		}
-		printf("Res = %lf\n",res);
-		r[k] = sqrt(tRes);
+		r[k] = sqrt(tRes); // Store the norm of the residue in a vector (r).
 		tRes = 0;
-		*timeResNorm += timestamp() - now;
+		*timeResNorm += timestamp() - now; // Get residue norm time.
 	}
-	*timeSor = *timeSor / MaxI;
+	*timeSor = *timeSor / MaxI; // Get average values.
 	*timeResNorm = *timeResNorm / MaxI;
 }
 
@@ -124,109 +117,63 @@ int main(int argc, char *argv[]) {
 
 	getParams(argc,argv,&fpExit);
 
-	Nx = (M_PI/Hx);
-	Ny = (M_PI/Hy);
-	Nx++;
-	Ny++;
+	//Nx = (M_PI/Hx);
+	//Ny = (M_PI/Hy);
+	//Nx++;
+	//Ny++;
+	Nx = (round(M_PI/Hx)) + 1;
+	Ny = (round(M_PI/Hy)) + 1;
 	W = 2 - ((Hx + Hy) / 2);
 	UDivisor = (2 / Hx * Hx) + (2 / Hy * Hy) + 4 * Pipi;
 
 	double sigma;
 	double *b, *x, *r, *timeSor, *timeResNorm;
 
-	b = malloc((Nx + 2) * (Ny + 2) * sizeof(double));
-	x = malloc((Nx + 2) * (Ny + 2) * sizeof(double));
+	b = malloc(Nx * Ny * sizeof(double));
+	x = malloc(Nx * Ny * sizeof(double));
 	r = malloc(MaxI * sizeof(double));
 	timeSor = calloc(1,sizeof(double));
 	timeResNorm = calloc(1,sizeof(double));
 
-	sigma = sinh(M_PI * M_PI);
+	sigma = sinh(Pipi);
 
-	// Creating borders
-	for(i=0; i<Nx; i++) {
+	for(i=0; i<Nx; i++) { // Creating borders
 		x[ in(i,0) ] = sin(2 * M_PI * (M_PI - (i * Hx))) * sigma;
-		x[ in(i,Nx+1) ] = sin(2 * M_PI * (i * Hx));
+		x[ in(i,Nx) ] = sin(2 * M_PI * (i * Hx));
 	}
 
-	//printf("Starting sor...\n");
-
 	sor(b,x,r,timeSor,timeResNorm);
-
-	//print_vector(x);
 
 	printf("TimeSor: %lf\nTimeResNorm: %lf\n\nNorma do Resíduo\n",*timeSor,*timeResNorm);
 	for(i=0; i<MaxI; ++i) {
 		printf("# i=%d: %lf\n",i,r[i]);
 	}
 
-	fprintf(fpExit,"# TimeSor: %lf\n# TimeResNorm: %lf\n\n# Norma do Resíduo\n",*timeSor,*timeResNorm);
+	fprintf(fpExit,"###########\n# Tempo Método SOR: %lf\n# Tempo Resíduo: %lf\n\n# Norma do Resíduo\n",*timeSor,*timeResNorm);
 	for(i=0; i<MaxI; ++i) {
 		fprintf(fpExit,"# i=%d: %lf\n",i,r[i]);
 	}
-	fprintf(fpExit,"\n");
-	FILE *expected = fopen("expected.txt","w");
+	fprintf(fpExit,"###########\n");
+	//FILE *expected = fopen("expected.txt","w");
 	for(i=0; i<Ny; i++) { // Print bottom border.
-		fprintf(fpExit, "%lf %lf %lf\n", 0.0f, i*Hy, x[i*Hx]);
-		fprintf(expected, "%lf %lf %lf\n", 0.0f, i*Hy, f[i*Hx]);
+		fprintf(fpExit, "%lf %lf %lf\n", 0.0f, i*Hy, subsRow(i, x));
+		//fprintf(expected, "%lf %lf %lf\n", 0.0f, i*Hy, f(i));
 	}
 	for(i=1; i<Nx; i++) { // Since im using subsRow, I cant start at position 0.
-		fprintf(fpExit,"%lf %lf %lf\n", i*Hx, 0.0f, x[i*Hx]) // Border.
-		fprintf(expected,"%lf %lf %lf\n", i*Hx, 0.0f, f[i*Hx]) // Border.
+		fprintf(fpExit,"%lf %lf %lf\n", i*Hx, 0.0f, subsRow(i*Ny,x)); // Border.
+		//fprintf(expected,"%lf %lf %lf\n", i*Hx, 0.0f, f(i)); // Border.
 		for(j=1; j<Ny; j++) {
 			fprintf(fpExit,"%lf %lf %lf\n",i*Hx,j*Hy,subsRow(i*Ny+j, x)); // Should we change i*Hx with j*Hy? (Columns by rows?)
-			fprintf(expected,"%lf %lf %lf\n",i*Hx,j*Hy,f(i*Ny+j));
+			//fprintf(expected,"%lf %lf %lf\n",i*Hx,j*Hy,f(i*Ny+j));
 		}
 	}
-	for(i=0; i<Ny; i++) { // Print bottom border.
-		fprintf(fpExit, "%lf %lf %lf\n", Nx*Hx, i*Hy, x[i*Hx]);
-		fprintf(expected, "%lf %lf %lf\n", Nx*Hx, i*Hy, f[i*Hx]);
+	for(i=0; i<Ny; i++) { // Print top border. We should check it.
+		fprintf(fpExit, "%lf %lf %lf\n", Nx*Hx, i*Hy, subsRow(Nx*Ny - Ny + i,x));
+		//fprintf(expected, "%lf %lf %lf\n", Nx*Hx, i*Hy, f(Nx*Ny - Ny + i));
 	}
 	// Nx columns and Ny rows.
 	fclose(fpExit);
+	//fclose(expected);
 
 	return 0;
 }
-
-/*
-u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
-         --------------------------------------------------------------------------------------------------------------------
-                                                          2/Δx² + 2/Δy² + 4π²
-
-
-Formato:
-
-Ax = B
-
-A [a11 a12 a13] * X [x1] = B [b1] -> a11*x1 + a12*x2 + a13*x3 = b1 -> x1 = (b1 - a12*x2 - a13*x3)/a11
-  [a21 a22 a23]     [x2]     [b2] -> a11*x1 + a12*x2 + a13*x3 = b2 -> x2 = (b2 - a11*x1 - a13*x3)/a12
-  [a31 a32 a33]     [x3]     [b3] -> a11*x1 + a12*x2 + a13*x3 = b3 -> x3 = (b3 - a11*x1 - a12*x2)/a13
-
-se x1 = u(1,1), sei calcular x1 da forma double u(int i, int j) {}
-Mesmo vale pra x2 e x3. E valeria pra x4, x5, x6, etc.
-
-
-Se u for uma matriz de 6 elementos. Ou seja, Hx = 0.25 e Hy = 0.3
-
-u  u   u   u
-u  x5  x6  u
-u  x3  x4  u
-u  x1  x2  u
-u  u   u   u
-
-5 linhas, 4 colunas.
-Ny = 3, Nx = 2.
-
-x1 = u11
-x2 = u12
-x3 = u13
-x4 = u21
-x5 = u22
-x6 = u23
-
-Matriz A, olhando pela equação u(i,j) obtida, seria algo assim:
-A = [1        ]
-    [  1      ]
-    [    1    ]
-    [      1  ]
-    [        1]
-*/

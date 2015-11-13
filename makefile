@@ -41,7 +41,7 @@ $(TEST).o: $(TEST).c
 
 
 clean:
-	@rm -f *% *.bak *~
+	@rm -f *% *.bak *~ *.o $(TEST) core
 
 distclean:   limpa
 	@rm -rf *.o lib$(LIBNOME).* lib$(LIBNOME2).* $(TEST)
