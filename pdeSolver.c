@@ -37,7 +37,7 @@ void print_errno(void) {
     printf("%s",strerror(errno));
 }
 
-void getParams(int argc, char* argv[], FILE *fp) {
+void getParams(int argc, char* argv[], FILE **fp) {
     if(argc != ARGS_NUM) {
         fprintf(stderr,"Wrong number of arguments.\n");
         exit(-1);
@@ -51,7 +51,7 @@ void getParams(int argc, char* argv[], FILE *fp) {
         } else if(strcmp(argv[i],"-i") == 0) {
             MaxI = atoi(argv[i+1]);
         } else if(strcmp(argv[i],"-o") == 0) {
-            fp = fopen(argv[i+1],"w");
+            *fp = fopen(argv[i+1],"w");
         } else {
             fprintf(stderr,"Incorrect parameter.\n");
             exit(-1);
@@ -96,13 +96,13 @@ void sor(double *b, double *x, double *r, double *timeSor, double *timeResNorm) 
 	double sigma, now, fxy, res, maxRes = 0, tRes = 0; // maxRes is the biggest residue, tRes is total residue in this iteration.
 	for(k=0; k<MaxI; k++) {
 		now = timestamp();
-		for(i=0; i<Nx * Ny; ++i) {
+		for(i = 1 + Ny; i < Nx * Ny - Ny - 1; ++i) { // Start at u[1][1], which means u[Ny+1]
 			x[i] = x[i] + W * (calcU(i,x) - x[i]);
 		}
 		*timeSor += timestamp() - now;
 		now = timestamp();
 		printf("Res = %lf - ",res);
-		for(i = 0; i < Nx * Ny; ++i) {
+		for(i = 1 + Ny; i < Nx * Ny - Ny - 1; ++i) {
 			res = f(i);
 			res -= subsRow(i,x);
 			if(res > maxRes)
@@ -122,8 +122,7 @@ int main(int argc, char *argv[]) {
 	int i, j, k;
 	FILE *fpExit;
 
-	getParams(argc,argv,fpExit);
-	fpExit = fopen("saida","w");
+	getParams(argc,argv,&fpExit);
 
 	Nx = (M_PI/Hx);
 	Ny = (M_PI/Hy);
@@ -135,7 +134,7 @@ int main(int argc, char *argv[]) {
 	double sigma;
 	double *b, *x, *r, *timeSor, *timeResNorm;
 
-	b = malloc(Nx * Ny * sizeof(double));
+	b = malloc((Nx + 2) * (Ny + 2) * sizeof(double));
 	x = malloc((Nx + 2) * (Ny + 2) * sizeof(double));
 	r = malloc(MaxI * sizeof(double));
 	timeSor = calloc(1,sizeof(double));
@@ -149,9 +148,11 @@ int main(int argc, char *argv[]) {
 		x[ in(i,Nx+1) ] = sin(2 * M_PI * (i * Hx));
 	}
 
+	//printf("Starting sor...\n");
+
 	sor(b,x,r,timeSor,timeResNorm);
 
-	print_vector(x);
+	//print_vector(x);
 
 	printf("TimeSor: %lf\nTimeResNorm: %lf\n\nNorma do Resíduo\n",*timeSor,*timeResNorm);
 	for(i=0; i<MaxI; ++i) {
@@ -164,14 +165,24 @@ int main(int argc, char *argv[]) {
 	}
 	fprintf(fpExit,"\n");
 	FILE *expected = fopen("expected.txt","w");
-	for(i=0; i<Nx; i++) {
-		for(j=0; j<Ny; j++) {
-			//fprintf(fpExit,"%lf %lf %lf\n",i*Hx,j*Hy,x[i*Ny + j]);
-			fprintf(fpExit,"%lf %lf %lf\n",i*Hx,j*Hy,subsRow(i*Ny+j, x));
+	for(i=0; i<Ny; i++) { // Print bottom border.
+		fprintf(fpExit, "%lf %lf %lf\n", 0.0f, i*Hy, x[i*Hx]);
+		fprintf(expected, "%lf %lf %lf\n", 0.0f, i*Hy, f[i*Hx]);
+	}
+	for(i=1; i<Nx; i++) { // Since im using subsRow, I cant start at position 0.
+		fprintf(fpExit,"%lf %lf %lf\n", i*Hx, 0.0f, x[i*Hx]) // Border.
+		fprintf(expected,"%lf %lf %lf\n", i*Hx, 0.0f, f[i*Hx]) // Border.
+		for(j=1; j<Ny; j++) {
+			fprintf(fpExit,"%lf %lf %lf\n",i*Hx,j*Hy,subsRow(i*Ny+j, x)); // Should we change i*Hx with j*Hy? (Columns by rows?)
 			fprintf(expected,"%lf %lf %lf\n",i*Hx,j*Hy,f(i*Ny+j));
 		}
 	}
+	for(i=0; i<Ny; i++) { // Print bottom border.
+		fprintf(fpExit, "%lf %lf %lf\n", Nx*Hx, i*Hy, x[i*Hx]);
+		fprintf(expected, "%lf %lf %lf\n", Nx*Hx, i*Hy, f[i*Hx]);
+	}
 	// Nx columns and Ny rows.
+	fclose(fpExit);
 
 	return 0;
 }
