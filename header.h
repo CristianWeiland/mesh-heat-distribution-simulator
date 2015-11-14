@@ -12,7 +12,9 @@ double Hx, Hy, W;
 double UDivisor;
 double Pipi = M_PI * M_PI; // Pipi = Pi * Pi
 
-void print_errno(void);
-void getParams(int argc, char* argv[], FILE **fp);
-double residueNorm(double *r);
 double timestamp(void);
+void getParams(int argc, char* argv[]);
+double f(int n);
+double calcU(int n, double *u);
+double subsRow(int n, double *u);
+void sor(double *x, double *r, double *timeSor, double *timeResNorm);
