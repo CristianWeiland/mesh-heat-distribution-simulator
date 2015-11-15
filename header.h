@@ -10,7 +10,6 @@
 int Nx, Ny, MaxI;
 double Hx, Hy, W;
 double UDivisor;
-double Pipi = M_PI * M_PI; // Pipi = Pi * Pi
 
 double timestamp(void);
 void getParams(int argc, char* argv[]);

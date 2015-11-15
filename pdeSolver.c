@@ -1,11 +1,13 @@
 #include "header.h"
 
-/* Final version of simplified equation:
+/*
+Final version of simplified equation:
 u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
          --------------------------------------------------------------------------------------------------------------------
                                                           2/Δx² + 2/Δy² + 4π²
 Residue:
-f(x,y) = (2/Δx² + 2/Δy² + 4π²) * u(i,j) - ((u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy)
+f(x,y) =
+(2/Δx² + 2/Δy² + 4π²)*u(i,j) - ( (u(i+1,j)+u(i-1,j))/Δx² + (u(i,j+1)+u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy )
 */
 
 double timestamp(void) {
@@ -42,10 +44,6 @@ double f(int n) {
 	int i = n / Nx, j = n % Nx;
 	double x = i * Hx, y = j * Hy;
 	return (4 * M_PI * M_PI * ( (sin(2 * M_PI * x)) * (sinh(M_PI * y)) + (sin(2 * M_PI * (M_PI - x))) * (sinh(M_PI * (M_PI - y))) ));
-}
-
-inline int in(int i, int j) { // Calculate vector index, like its a matrix.
-	return i*Ny + j;
 }
 
 double calcU(int n, double *u) {
@@ -112,9 +110,9 @@ int main(int argc, char *argv[]) {
 	timeResNorm = calloc(1,sizeof(double));
 	fpExit = fopen("solution.dat","w");
 
-	sigma = sinh(Pipi);
+	sigma = sinh(M_PI * M_PI);
 
-	for(i = Nx; i < Nx*(Ny-1); ++i) {
+	for(i = Nx; i < Nx*Ny - Nx; ++i) { // Initialize central points (with left and right borders) as 0.
 		x[i] = 0.0f;
 	}
 
@@ -130,29 +128,49 @@ int main(int argc, char *argv[]) {
 		fprintf(fpExit,"# i=%d: %lf\n",i,r[i]);
 	}
 	fprintf(fpExit,"###########\n");
-	//FILE *expected = fopen("expected.txt","w");
-
+	FILE *expected = fopen("expected.txt","w");
+/*
 	for(i = 0; i < Nx; ++i) { // Print bottom border.
+		printf("1- Salvando no indice %d %d, ponto %f %f\n",i,0,i*Hx,0.0f);
 		fprintf(fpExit, "%lf %lf %lf\n", i*Hx, 0.0f, x[i]);
-		//fprintf(expected, "%lf %lf %lf\n", i*Hx, 0.0f, f(i));
-	}
+		fprintf(expected, "%lf %lf %lf\n", i*Hx, 0.0f, f(i));
+	}*/
 	for(i = 1; i < Ny - 1; ++i) { // Since im using subsRow, I cant start at position 0.
+		/*printf("2- Salvando no indice %d %d, ponto %f %f\n",0,i,0.0f,i*Hy);
 		fprintf(fpExit,"%lf %lf %lf\n", 0.0f, i*Hy, x[i*Nx]); // Left border.
-		//fprintf(expected,"%lf %lf %lf\n", 0.0f, i*Hy, f(i*Nx)); // Left border.
+		fprintf(expected,"%lf %lf %lf\n", 0.0f, i*Hy, f(i*Nx)); // Left border.*/
 		for(j = 1; j < Nx - 1; ++j) {
-			fprintf(fpExit,"%lf %lf %lf\n",j*Hx,i*Hy,subsRow(i*Nx+j, x));
-			//fprintf(fpExit,"%lf %lf %lf\n",j*Hx,i*Hy,f(i*Nx+j));
+			//printf("3- Salvando no indice %d %d, ponto %f %f\n",j,i,j*Hx,i*Hy);
+			fprintf(fpExit,"%.15lf %.15lf %.15lf\n",j*Hx,i*Hy,subsRow(i*Nx+j, x));
+			fprintf(fpExit,"%.15lf %.15lf %.15lf\n",j*Hx,i*Hy,f(i*Nx+j));
 		}
+		/*printf("4- Salvando no indice %d %d, ponto %f %f\n",Ny,i,M_PI,i*Hy);
 		fprintf(fpExit,"%lf %lf %lf\n", M_PI, i*Hy, x[i*Nx+Nx-1]); // Right border.
-		//fprintf(expected,"%lf %lf %lf\n", M_PI, i*Hy, f(i*Nx+Nx-1)); // Right border.
-	}
+		fprintf(expected,"%lf %lf %lf\n", M_PI, i*Hy, f(i*Nx+Nx-1)); // Right border.*/
+	}/*
 	for(i = 0; i < Nx; ++i) { // Print top border. We should check it.
+		printf("5- Salvando no indice %d %d, ponto %f %f\n",i,Ny,i*Hx,M_PI);
 		fprintf(fpExit, "%lf %lf %lf\n", i*Hx, M_PI, x[Nx*Ny - Nx + i]); // Top border.
-		//fprintf(expected, "%lf %lf %lf\n", i*Hx, M_PI, f(Nx*Ny - Nx + i)); // Top border.
-	}
+		fprintf(expected, "%lf %lf %lf\n", i*Hx, M_PI, f(Nx*Ny - Nx + i)); // Top border.
+	}*/
 
 	fclose(fpExit);
-	//fclose(expected);
+	fclose(expected);
 
 	return 0;
 }
+
+/*
+
+6 A30 A31 A32 A33 A34
+5 A25 A26 A27 A28 A29
+4 A20 A21 A22 A23 A24
+3 A15 A16 A17 A18 A19
+2 A10 A11 A12 A13 A14
+1  A5  A6  A7  A8  A9
+0  A0  A1  A2  A3  A4
+    0   1   2   3   4
+
+Nx = 5
+Ny = 7
+*/
