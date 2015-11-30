@@ -115,8 +115,8 @@ void sor(double *x, double *r, double *timeSor, double *timeResNorm, double w, d
 }
 
 int main(int argc, char *argv[]) {
-	int i, j, k, nx, ny, maxI;
-	double hx, hy, w, sigma, uDivisor, *x, *r, *f, *timeSor, *timeResNorm;
+	int i, j, k, nx, ny, maxI, alpha;
+	double hx, hy, w, beta, gama, sigma, uDivisor, *x, *r, *f, *timeSor, *timeResNorm;
 	FILE *fpExit;
 
 	getParams(argc,argv,&hx,&hy,&maxI);
@@ -158,15 +158,20 @@ int main(int argc, char *argv[]) {
     }
     */
 
-	sigma = sinh(M_PI * M_PI);
 
-	for(i = nx; i < nx*ny - nx; ++i) { // Initialize central points (with left and right borders) as 0.
+
+    sigma = sinh(M_PI * M_PI);
+    alpha = nx * ny - nx;
+    beta = 2 * M_PI * hx;
+    gama = 2 * M_PI * M_PI;
+
+	for(i = nx; i < alpha; ++i) { // Initialize central points (with left and right borders) as 0.
 		x[i] = 0.0f;
 	}
 
 	for(i=0; i<nx; ++i) { // Creating borders
-		x[i] = sin(2 * M_PI * (M_PI - (i * hx))) * sigma;
-		x[nx*ny-nx+i] = sin(2 * M_PI * (i * hx)) * sigma;
+        x[i] = sin(gama - (i * hx)) * sigma;
+        x[alpha+i] = sin(beta * i) * sigma;
 	}
 
     //sor(x,r,f,timeSor,timeResNorm,w,uDivisor,hx,hy,nx,ny,maxI);
