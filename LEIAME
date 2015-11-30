@@ -1,0 +1,51 @@
+Alunos:
+
+Cristian Weiland - GRR20142235
+Lucas Romano Santos - GRR20143898
+
+Diretorio trabalho_CI164, que contem:
+    - Makefile
+    - pdeSolver.c -> codigo fonte que contem as funcoes implementadas tal como a funcao main
+    - header.h -> codigo fonte com prototipos de funcoes, variaveis globais e bibliotecas usadas
+    - LEIAME
+
+Estruturas de Dados utilizadas:
+
+Nx e Ny -> numero de pontos nos eixos x e y, respectivamente;
+Hx e Hy -> tamanho do intervalo entre pontos nos eixos x e y respectivamente;
+W -> coeficiente de relaxacao;
+MaxI -> numero de iteracoes a serem executadas;
+UDivisor -> resultado da operacao 2/hx^2 + 2/hy^2 + 4*pi^2;
+sigma -> variavel que armazena sinh(pi * pi), para melhorar a eficiencia na inicializacao das bordas;
+x -> (double *) vetor que contem a solucao do problema apresentado;
+r -> (double *) vetor que contem os residuos de cada iteracao da resolucao;
+timeSor -> tempo medio de resolucao de uma iteracao;
+timeResSor -> tempo medio do calculo dos residuos;
+fpExit -> (FILE *) arquivo chamado "solution.dat" que contera o resultado da execucao do programa;
+
+Algoritmos:
+
+getParams -> funcao que recebe os parametros (hx, hy, numero de iteracoes e nome do arquivo de saida);
+sor -> funcao que executa a principal parte de processamento do programa. Ela executa todas as iteracoes do metodo sor, alem de computador o residuo;
+f -> calcula o valor de f(x,y) para um dado n, no qual: 0 < n < Nx*Ny;
+calcU -> calcula o valor de u(i,j) para um dado n, no qual: 1+Nx < n < Nx*Ny -Nx-1
+subsRow -> substitui os valores (armazenados na estrutura x) em uma linha especifica (n). Isso eh util para o calculo do residuo, dado por f(n) - subsRow(n,x) e para gerar os valores que serao inseridos no grafico;
+
+Alternativas de implementacao consideradas:
+
+Para a estrutura x utilizar uma matriz (double **), mas, por questoes de eficiencia, foi utilizado apenas um apontador (double *).
+Para o calculo de f(x,y) armazenar todos os valores em uma estrutura de dados, porque o valor de f(x,y) nao muda durante toda a execucao do programa. Isso nao era eficiente porque ocuparia muita memoria, e mesmo que o calculo tivesse que ser efetuado varias vezes, a estrutura nao compensaria.
+
+Dificuldades encontradas:
+
+Acertar os indices nos 'for' e tambem nas funcoes calcU, subsRow e f, mas que com uma analise paciente e precisa foram resolvidas.
+
+Nota:
+
+O arquivo cujo nome eh passado por parametro (-o filename) contem apenas duas linhas, para executar o gnuplot na forma:
+$ gnuplot filename
+Ele abre o arquivo "solution.dat", que contem:
+	- Tempo medio da execucao do metodo SOR
+	- Tempo medio do calculo de cada residuo
+	- Residuo em cada iteracao
+	- Resultado obtido com a execucao do programa

@@ -7,13 +7,11 @@
 
 #define ARGS_NUM 9
 
-int Nx, Ny, MaxI;
-double Hx, Hy, W;
-double UDivisor;
-
 double timestamp(void);
-void getParams(int argc, char* argv[]);
-double f(int n);
-double calcU(int n, double *u);
-double subsRow(int n, double *u);
-void sor(double *x, double *r, double *timeSor, double *timeResNorm);
+void getParams(int argc, char* argv[], double *hx, double *hy, int *maxI);
+double f(int n, double hx, double hy, int nx);
+//double calcU(int n, double *u, double *f, double uDivisor, double hx, double hy, int nx) {
+double calcU(int n, double *u, double uDivisor, double hx, double hy, int nx);
+double subsRow(int n, double *u, double uDivisor, double hx, double hy, int nx);
+//void sor(double *x, double *r, double *f, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
+void sor(double *x, double *r, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI);
