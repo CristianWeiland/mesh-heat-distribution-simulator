@@ -6,7 +6,7 @@ double timestamp(void) {
     return((double)(tp.tv_sec + tp.tv_usec/1000000.0));
 }
 
-void getParams(int argc, char* argv[]) {
+void getParams(int argc, char* argv[], double *hx, double *hy, int *maxI) {
     if(argc != ARGS_NUM) {
         fprintf(stderr,"Wrong number of arguments.\n");
         exit(-1);
@@ -17,20 +17,20 @@ void getParams(int argc, char* argv[]) {
 
     for(i=1; i<ARGS_NUM; i+=2) {
         if(strcmp(argv[i],"-hx") == 0) {
-            Hx = atof(argv[i+1]);
-            if(Hx <= 0.0f) {
+            *hx = atof(argv[i+1]);
+            if(*hx <= 0.0f) {
             	fprintf(stderr,"Distance should not be less than 0.\n");
             	exit(-4);
             }
         } else if(strcmp(argv[i],"-hy") == 0) {
-            Hy = atof(argv[i+1]);
-            if(Hy <= 0.0f) {
+            *hy = atof(argv[i+1]);
+            if(*hy <= 0.0f) {
             	fprintf(stderr,"Distance should not be less than 0.\n");
             	exit(-4);
             }
         } else if(strcmp(argv[i],"-i") == 0) {
-            MaxI = atoi(argv[i+1]);
-            if(MaxI < 1) {
+            *maxI = atoi(argv[i+1]);
+            if(*maxI < 1) {
             	fprintf(stderr,"You need to do at least 1 iteration.\n");
             	exit(-3);
             }
@@ -48,16 +48,17 @@ void getParams(int argc, char* argv[]) {
     }
 }
 
-double f(int n) {
+double f(int n, double hx, double hy, int nx) {
 /*
 f(x,y) = 4π²[ sin(2πx)sinh(πy) + sin(2π(π−x))sinh(π(π−y)) ]
 */
-	int i = n % Nx, j = n / Nx;
-	double x = i * Hx, y = j * Hy;
+	int i = n % nx, j = n / nx;
+	double x = i * hx, y = j * hy;
 	return (4*M_PI*M_PI * ( (sin(2*M_PI*x)) * (sinh(M_PI*y)) + (sin(2*M_PI*(M_PI-x))) * (sinh(M_PI*(M_PI-y))) ));
 }
 
-double calcU(int n, double *u) {
+//double calcU(int n, double *u, double *f, double uDivisor, double hx, double hy, int nx) {
+double calcU(int n, double *u, double uDivisor, double hx, double hy, int nx) {
 /*
 Final version of simplified equation:
 u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
@@ -65,37 +66,41 @@ u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-
                                                           2/Δx² + 2/Δy² + 4π²
 */
 	double res = 0;
-	res += f(n) + (u[n+Nx] + u[n-Nx] ) / (Hx * Hx) + (u[n+1] + u[n-1]) / (Hy * Hy);
-	res += (u[n-Nx] - u[n+Nx]) / (2 * Hx) + (u[n-1] - u[n+1]) / (2 * Hy);
-	res = res / UDivisor;
+    //res += f[n] + (u[n+nx] + u[n-nx] ) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy);
+	res += f(n,hx,hy,nx) + (u[n+nx] + u[n-nx] ) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy);
+	res += (u[n-nx] - u[n+nx]) / (2 * hx) + (u[n-1] - u[n+1]) / (2 * hy);
+	res = res / uDivisor;
 	return res;
 }
 
-double subsRow(int n, double *u) {
+double subsRow(int n, double *u, double uDivisor, double hx, double hy, int nx) {
 /*
 f(x,y) =
 (2/Δx²+2/Δy²+4π²)*u(i,j) - ( (u(i+1,j)+u(i-1,j))/Δx² + (u(i,j+1)+u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy) )
 */
 	double res = 0;
-	res = UDivisor * u[n];
-	res -= ((u[n+Nx] + u[n-Nx]) / (Hx * Hx) + (u[n+1] + u[n-1]) / (Hy * Hy) + (u[n-Nx] - u[n+Nx]) / (2 * Hx) + (u[n-1] - u[n+1]) / (2 * Hy));
+	res = uDivisor * u[n];
+	res -= ((u[n+nx] + u[n-nx]) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy) + (u[n-nx] - u[n+nx]) / (2 * hx) + (u[n-1] - u[n+1]) / (2 * hy));
 	return res;
 }
 
-void sor(double *x, double *r, double *timeSor, double *timeResNorm) {
+//void sor(double *x, double *r, double *f, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
+void sor(double *x, double *r, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
 	int i, j, k;
 	double sigma, now, fxy, res, maxRes = 0, tRes = 0; // maxRes is the biggest residue, tRes is total residue in this iteration.
 
-	for(k=0; k<MaxI; ++k) {
+	for(k=0; k<maxI; ++k) {
 		now = timestamp(); // Starting iteration time counter.
-		for(i = 1 + Nx; i < Nx * Ny - Nx - 1; ++i) { // Start at u[1][1], which means u[Ny+1] and do not calculate borders
-			x[i] = x[i] + W * (calcU(i,x) - x[i]);
+		for(i = 1 + nx; i < nx * ny - nx - 1; ++i) { // Start at u[1][1], which means u[ny+1] and do not calculate borders
+			//x[i] = x[i] + w * (calcU(i,x,f,uDivisor,hx,hy,nx) - x[i]);
+            x[i] = x[i] + w * (calcU(i,x,uDivisor,hx,hy,nx) - x[i]);
 		}
 		*timeSor += timestamp() - now; // Get iteration time.
 		now = timestamp(); // Start residue norm time counter.
-		for(i = 1 + Nx; i < Nx * Ny - Nx - 1; ++i) {
-			res = f(i); // res = f(x,y)
-			res -= subsRow(i,x); // res = f(x,y) - (a0 * x0 + a1 * x1 + ... + an * xn)
+		for(i = 1 + nx; i < nx * ny - nx - 1; ++i) {
+            //res = f(i);
+			res = f(i,hx,hy,nx); // res = f(x,y)
+			res -= subsRow(i,x,uDivisor,hx,hy,nx); // res = f(x,y) - (a0 * x0 + a1 * x1 + ... + an * xn)
 			if(res > maxRes)
 				maxRes = res;
 			tRes += res * res; // Adds res² to the total residue of this iteration.
@@ -105,27 +110,27 @@ void sor(double *x, double *r, double *timeSor, double *timeResNorm) {
 		*timeResNorm += timestamp() - now; // Get residue norm time.
 	}
 
-	*timeSor = *timeSor / MaxI; // Get average values.
-	*timeResNorm = *timeResNorm / MaxI;
+	*timeSor = *timeSor / maxI; // Get average values.
+	*timeResNorm = *timeResNorm / maxI;
 }
 
 int main(int argc, char *argv[]) {
-	int i, j, k;
-	double sigma, *x, *r, *timeSor, *timeResNorm;
+	int i, j, k, nx, ny, maxI;
+	double hx, hy, w, sigma, uDivisor, *x, *r, *f, *timeSor, *timeResNorm;
 	FILE *fpExit;
 
-	getParams(argc,argv);
+	getParams(argc,argv,&hx,&hy,&maxI);
 
-	Nx = (round(M_PI/Hx)) + 1;
-	Ny = (round(M_PI/Hy)) + 1;
-	W = 2 - ((Hx + Hy) / 2);
-	UDivisor = (2 / (Hx * Hx)) + (2 / (Hy * Hy)) + 4 * M_PI * M_PI;
+	nx = (round(M_PI/hx)) + 1;
+	ny = (round(M_PI/hy)) + 1;
+	w = 2 - ((hx + hy) / 2);
+	uDivisor = (2 / (hx * hx)) + (2 / (hy * hy)) + 4 * M_PI * M_PI;
 
-	if((x = malloc(Nx * Ny * sizeof(double))) == NULL) {
+	if((x = malloc(nx * ny * sizeof(double))) == NULL) {
 		fprintf(stderr,"Could not allocate memory.");
 		exit(-5);
 	}
-	if((r = malloc(MaxI * sizeof(double))) == NULL) {
+	if((r = malloc(maxI * sizeof(double))) == NULL) {
 		fprintf(stderr,"Could not allocate memory.");
 		exit(-5);
 	}
@@ -141,29 +146,41 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr,"Could not open file.");
 		exit(-6);
 	}
+    /*
+    if((f = malloc(nx * ny * sizeof(double))) == NULL) {
+        fprintf(stderr,"Could not allocate memory.");
+        exit(-5);
+    }
+    for(i=1; i<ny-1; i++) { // Ignoring borders.
+        for(j=1; j<nx-1; j++) { // Ignoring borders as well.
+            f[i*nx+j] = f(i*nx+j); // Please check those indexes. (looking to lines 181-185, it looks OK).
+        }
+    }
+    */
 
 	sigma = sinh(M_PI * M_PI);
 
-	for(i = Nx; i < Nx*Ny - Nx; ++i) { // Initialize central points (with left and right borders) as 0.
+	for(i = nx; i < nx*ny - nx; ++i) { // Initialize central points (with left and right borders) as 0.
 		x[i] = 0.0f;
 	}
 
-	for(i=0; i<Nx; ++i) { // Creating borders
-		x[i] = sin(2 * M_PI * (M_PI - (i * Hx))) * sigma;
-		x[Nx*Ny-Nx+i] = sin(2 * M_PI * (i * Hx)) * sigma;
+	for(i=0; i<nx; ++i) { // Creating borders
+		x[i] = sin(2 * M_PI * (M_PI - (i * hx))) * sigma;
+		x[nx*ny-nx+i] = sin(2 * M_PI * (i * hx)) * sigma;
 	}
 
-	sor(x,r,timeSor,timeResNorm);
+    //sor(x,r,f,timeSor,timeResNorm,w,uDivisor,hx,hy,nx,ny,maxI);
+	sor(x,r,timeSor,timeResNorm,w,uDivisor,hx,hy,nx,ny,maxI);
 
 	fprintf(fpExit,"###########\n# Tempo Método SOR: %lf\n# Tempo Resíduo: %lf\n\n# Norma do Resíduo\n",*timeSor,*timeResNorm);
-	for(i=0; i<MaxI; ++i) {
+	for(i=0; i<maxI; ++i) {
 		fprintf(fpExit,"# i=%d: %.15lf\n",i,r[i]);
 	}
 	fprintf(fpExit,"###########\n");
 
-	for(i = 1; i < Ny - 1; ++i) { // This 'for' has to ignore borders.
-		for(j = 1; j < Nx - 1; ++j) {
-			fprintf(fpExit,"%.15lf %.15lf %.15lf\n",j*Hx,i*Hy,subsRow(i*Nx+j, x));
+	for(i = 1; i < ny - 1; ++i) { // This 'for' has to ignore borders.
+		for(j = 1; j < nx - 1; ++j) {
+			fprintf(fpExit,"%.15lf %.15lf %.15lf\n",j*hx,i*hy,x[i*nx+j]);
 		}
 	}
 
