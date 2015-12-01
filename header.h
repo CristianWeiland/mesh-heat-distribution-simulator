@@ -8,10 +8,11 @@
 #define ARGS_NUM 9
 
 double timestamp(void);
-void getParams(int argc, char* argv[], double *hx, double *hy, int *maxI);
-double f(int n, double hx, double hy, int nx);
-//double calcU(int n, double *u, double *f, double uDivisor, double hx, double hy, int nx) {
-double calcU(int n, double *u, double uDivisor, double hx, double hy, int nx);
+FILE* getParams(int argc, char* argv[], double *hx, double *hy, int *maxI);
+//double f(int n, double hx, double hy, int nx);
+double f(int i, int j, double hx, double hy, int nx);
+double calcU(int n, double *u, double *fMem, double uDivisor, double hx, double hy, int nx);
+//double calcU(int n, double *u, double uDivisor, double hx, double hy, int nx);
 double subsRow(int n, double *u, double uDivisor, double hx, double hy, int nx);
-//void sor(double *x, double *r, double *f, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
-void sor(double *x, double *r, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI);
+void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI);
+//void sor(double *x, double *r, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI);
