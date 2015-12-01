@@ -8,6 +8,7 @@
     AR = ar -rcu
     INSTALL = install
     OPTIMIZATION = -O2
+    #OPTIMIZATION = -O3 -mavx
 
 .PHONY: clean install all
 

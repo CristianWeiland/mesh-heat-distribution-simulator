@@ -111,6 +111,7 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 	            x[i*nx+j] = x[i*nx+j] + w * (calcU(i*nx+j,x,fMem,uDivisor,hx,hy,nx) - x[i*nx+j]);
 	        }
 	    }
+
 		*timeSor += timestamp() - now; // Get iteration time.
 		now = timestamp(); // Start residue norm time counter.
 
@@ -161,15 +162,15 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr,"Could not allocate memory.");
 		exit(-5);
 	}
-	if((fpData = fopen("solution.dat","w")) == NULL) {
-		fprintf(stderr,"Could not open file.");
-		exit(-6);
-	}
-
     if((fMem = malloc(nx * ny * sizeof(double))) == NULL) {
         fprintf(stderr,"Could not allocate memory.");
         exit(-5);
     }
+
+	if((fpData = fopen("solution.dat","w")) == NULL) {
+		fprintf(stderr,"Could not open file.");
+		exit(-6);
+	}
 
 
     timeSor = 0.0f;
@@ -178,17 +179,28 @@ int main(int argc, char *argv[]) {
     sigma = sinh(M_PI * M_PI);
     alpha = nx * ny - nx;
     beta = 2 * M_PI * hx;
-    gama = 2 * M_PI * M_PI;
-
-	for(i = nx; i < alpha; ++i) { // Initialize central points (with left and right borders) as 0.
+/*
+	for(i = nx; i < nx * ny - nx; ++i) { // Initialize central points (with left and right borders) as 0.
 		x[i] = 0.0f;
+	}
+*/
+	for(i = 1; i < ny - 1; ++i) { // This 'for' has to ignore borders.
+		for(j = 0; j < nx; ++j) {
+			x[i*nx+j] = 0.0f;
+		}
 	}
 
 	for(i=0; i<nx; ++i) { // Creating borders
-        x[i] = sin(gama - (i * hx)) * sigma;
+        x[i] = sin(2 * M_PI * (M_PI - (i * hx))) * sigma;
         x[alpha+i] = sin(beta * i) * sigma;
 	}
 
+/*
+	for(i=0; i<nx; ++i) { // Creating borders
+		x[i] = sin(2 * M_PI * (M_PI - (i * hx))) * sigma;
+		x[nx*ny-nx+i] = sin(2 * M_PI * (i * hx)) * sigma;
+	}
+*/
 	// Initializing f(x,y)
     for(i=1; i<ny-1; ++i) { // Ignoring borders.
         for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
