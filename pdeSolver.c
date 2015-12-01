@@ -163,7 +163,7 @@ int main(int argc, char *argv[]) {
 
 	for(i = 1; i < Ny - 1; ++i) { // This 'for' has to ignore borders.
 		for(j = 1; j < Nx - 1; ++j) {
-			fprintf(fpExit,"%.15lf %.15lf %.15lf\n",j*Hx,i*Hy,subsRow(i*Nx+j, x));
+			fprintf(fpExit,"%.15lf %.15lf %.15lf\n",j*Hx,i*Hy,x[i*Nx+j]);
 		}
 	}
 
