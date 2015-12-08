@@ -1,0 +1,123 @@
+Sem Inline:
+
+Execução 1:
+Tempo Método SOR: 0.001517
+Tempo Resíduo: 0.000380
+
+Execução 2:
+Tempo Método SOR: 0.001517
+Tempo Resíduo: 0.000380
+
+Execução 3:
+Tempo Método SOR: 0.001525
+Tempo Resíduo: 0.000382
+
+Com Inline:
+
+Execução 1:
+Tempo Método SOR: 0.001540
+Tempo Resíduo: 0.000242
+
+Execução 2:
+Tempo Método SOR: 0.001476
+Tempo Resíduo: 0.000222
+
+Execução 3:
+Tempo Método SOR: 0.001481
+Tempo Resíduo: 0.000224
+
+--------------------------------------------------
+
+./pdeSolver -hx 0.01 -hy 0.01 -i 1000 -o graph
+
+Com Inline && Block Tam 1:
+   6 # Tempo Método SOR: 0.001495
+   7 # Tempo Resíduo: 0.000227
+
+   6 # Tempo Método SOR: 0.001471
+   7 # Tempo Resíduo: 0.000220
+
+   6 # Tempo Método SOR: 0.001469
+   7 # Tempo Resíduo: 0.000220
+
+Com Inline && Block Tam 2:
+   6 # Tempo Método SOR: 0.000770
+   7 # Tempo Resíduo: 0.000218
+
+   6 # Tempo Método SOR: 0.000768
+   7 # Tempo Resíduo: 0.000217
+
+   6 # Tempo Método SOR: 0.000767
+   7 # Tempo Resíduo: 0.000217
+
+
+Com Inline && Block Tam 3:
+   6 # Tempo Método SOR: 0.000752
+   7 # Tempo Resíduo: 0.000226
+
+   6 # Tempo Método SOR: 0.000735
+   7 # Tempo Resíduo: 0.000221
+
+   6 # Tempo Método SOR: 0.000731
+   7 # Tempo Resíduo: 0.000219
+
+
+Com Inline && Block Tam 4:
+   6 # Tempo Método SOR: 0.000755
+   7 # Tempo Resíduo: 0.000220
+
+   6 # Tempo Método SOR: 0.000742
+   7 # Tempo Resíduo: 0.000217
+
+   6 # Tempo Método SOR: 0.000742
+   7 # Tempo Resíduo: 0.000217
+
+Com Inline && Block Tam 6:
+   6 # Tempo Método SOR: 0.000885
+   7 # Tempo Resíduo: 0.000224
+
+   6 # Tempo Método SOR: 0.000885
+   7 # Tempo Resíduo: 0.000225
+
+   6 # Tempo Método SOR: 0.000871
+   7 # Tempo Resíduo: 0.000220
+
+Com Inline && Block Tam 8:
+   6 # Tempo Método SOR: 0.000853
+   7 # Tempo Resíduo: 0.000220
+
+   6 # Tempo Método SOR: 0.000852
+   7 # Tempo Resíduo: 0.000220
+
+   6 # Tempo Método SOR: 0.000851
+   7 # Tempo Resíduo: 0.000220
+
+Com Inline && Block Tam 10:
+   6 # Tempo Método SOR: 0.000860
+   7 # Tempo Resíduo: 0.000220
+
+   6 # Tempo Método SOR: 0.000862
+   7 # Tempo Resíduo: 0.000220
+
+   6 # Tempo Método SOR: 0.000860
+   7 # Tempo Resíduo: 0.000220
+
+Com Inline && Block Tam 126:
+   6 # Tempo Método SOR: 0.001440
+   7 # Tempo Resíduo: 0.000221
+
+   6 # Tempo Método SOR: 0.001435
+   7 # Tempo Resíduo: 0.000220
+
+   6 # Tempo Método SOR: 0.001475
+   7 # Tempo Resíduo: 0.000228
+
+Com Inline && Block Tam 128:
+   6 # Tempo Método SOR: 0.001438
+   7 # Tempo Resíduo: 0.000222
+
+   6 # Tempo Método SOR: 0.001467
+   7 # Tempo Resíduo: 0.000230
+
+   6 # Tempo Método SOR: 0.001479
+   7 # Tempo Resíduo: 0.000236

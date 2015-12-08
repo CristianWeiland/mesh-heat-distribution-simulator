@@ -6,6 +6,7 @@
 #include <time.h>
 
 #define ARGS_NUM 9
+#define BLOCK_SIZE 3
 
 double timestamp(void);
 FILE* getParams(int argc, char* argv[], double *hx, double *hy, int *maxI);

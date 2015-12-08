@@ -62,19 +62,16 @@ f(x,y) = 4π²[ sin(2πx)sinh(πy) + sin(2π(π−x))sinh(π(π−y)) ]
 }
 
 inline double calcU(int n, double *u, double *fMem, double uDivisor, double hx, double hy, int nx, double coef1, double coef2, double coef3, double coef4) {
-//double calcU(int n, double *u, double uDivisor, double hx, double hy, int nx) {
 /*
 Final version of simplified equation:
 u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
          --------------------------------------------------------------------------------------------------------------------
                                                         2/Δx² + 2/Δy² + 4π²
 Final version 2:
-
-                             coef[0]                   coef[1]                   coef[2]                   coef[3]
+                             coef1                     coef2                     coef3                     coef4  
 u(i,j) = f(x,y) + u(i+1,j) * 1/(Δx(Δx-2)) + u(i-1,j) * 1/(Δx(Δx+2)) + u(i,j+1) * 1/(Δy(Δy-2)) + u(i,j-1) * 1/(Δy(Δy+2))
          --------------------------------------------------------------------------------------------------------------
                                                         2/Δx² + 2/Δy² + 4π²
-
 */
 /*
 	double res = 0;
@@ -84,17 +81,20 @@ u(i,j) = f(x,y) + u(i+1,j) * 1/(Δx(Δx-2)) + u(i-1,j) * 1/(Δx(Δx+2)) + u(i,j+
 	res = res / uDivisor;
 	return res;
 */
-/*
-	return ((fMem[n] + (u[n+nx] + u[n-nx] ) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy) + (u[n-nx] - u[n+nx])
-			 / (2 * hx) + (u[n-1] - u[n+1]) / (2 * hy)) / uDivisor);
-*/
-    return ((fMem[n] + u[n+nx]*coef1 + u[n-nx]*coef2 + u[n-1]*coef4 + u[n+1]*coef3) / uDivisor);
+
+	return ((fMem[n] + (u[n+nx] + u[n-nx] ) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy) + (u[n-nx] - u[n+nx]) / (2 * hx) + (u[n-1] - u[n+1]) / (2 * hy)) / uDivisor);
+
+    //return ((fMem[n] + u[n+nx]*coef1 + u[n-nx]*coef2 + u[n-1]*coef4 + u[n+1]*coef3) / uDivisor);
 }
 
 inline double subsRow(int n, double *u, double uDivisor, double hx, double hy, int nx, double coef1, double coef2, double coef3, double coef4) {
 /*
 f(x,y) =
 (2/Δx²+2/Δy²+4π²)*u(i,j) - ( (u(i+1,j)+u(i-1,j))/Δx² + (u(i,j+1)+u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy) )
+*/
+/*
+2/Δx²+2/Δy²+4π² * u(i,j) = f(x,y) + u(i+1,j) * 1/(Δx(Δx-2)) + u(i-1,j) * 1/(Δx(Δx+2)) + u(i,j+1) * 1/(Δy(Δy-2)) + u(i,j-1) * 1/(Δy(Δy+2))
+f(x,y) = 2/Δx²+2/Δy²+4π² * u(i,j) - (u(i+1,j) * 1/(Δx(Δx-2)) + u(i-1,j) * 1/(Δx(Δx+2)) + u(i,j+1) * 1/(Δy(Δy-2)) + u(i,j-1) * 1/(Δy(Δy+2)))
 */
 /*
 	double res = 0;
@@ -106,19 +106,19 @@ f(x,y) =
 	return uDivisor * u[n] - ((u[n+nx] + u[n-nx]) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy) + (u[n-nx] - u[n+nx])
 			/ (2 * hx) + (u[n-1] - u[n+1]) / (2 * hy));
 */
-    return (uDivisor * u[n] - (u[n+nx]*coef1 + u[n-nx]*coef2 + u[n+1]*coef3 + u[n-1]*coef4));
+    return (uDivisor * u[n] + (-1 * (u[n+nx]*coef1 + u[n-nx]*coef2 + u[n+1]*coef3 + u[n-1]*coef4)));
 }
 
 void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
 //void sor(double *x, double *r, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
-	int i, j, k;
+	int i, j, k, l, m, row, col;
 	double sigma, now, fxy, res, maxRes = 0, tRes = 0; // maxRes is the biggest residue, tRes is total residue in this iteration.
     double coef1, coef2, coef3, coef4;
 
-    coef1 = 1/(hx * (hx - 2));
-    coef2 = 1/(hx * (hx + 2));
-    coef3 = 1/(hy * (hy - 2));
-    coef4 = 1/(hy * (hy + 2));
+    coef1 = (1/hx*hx) - (1/(2*hx)); // u(i+1,j)
+    coef2 = (1/hx*hx) + (1/(2*hx)); // u(i-1,j)
+    coef3 = (1/hy*hy) - (1/(2*hy)); // u(i,j+1)
+    coef4 = (1/hy*hy) + (1/(2*hy)); // u(i,j-1)
 
 	for(k=0; k<maxI; ++k) {
 		now = timestamp(); // Starting iteration time counter.
@@ -126,12 +126,26 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 			x[i] = x[i] + w * (calcU(i,x,fMem,uDivisor,hx,hy,nx) - x[i]);
             //x[i] = x[i] + w * (calcU(i,x,uDivisor,hx,hy,nx) - x[i]);
 		}*/
+        /*
 	    for(i=1; i<ny-1; ++i) { // Ignoring borders.
 	        for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
 	            x[i*nx+j] = x[i*nx+j] + w * (calcU(i*nx+j,x,fMem,uDivisor,hx,hy,nx,coef1,coef2,coef3,coef4) - x[i*nx+j]);
 	        }
 	    }
-
+        */
+        
+        for(i=1; i<ny-1; i+=BLOCK_SIZE) {
+            for(j=1; j<nx-1; j+=BLOCK_SIZE) {
+                for(l=0; l<BLOCK_SIZE && l+i<ny-1; ++l) {
+                    for(m=0; m<BLOCK_SIZE && m+j<nx-1; ++m) {
+                        row = i+l;
+                        col = j+m;
+                        x[row*nx+col] = x[row*nx+col] + w * (calcU(row*nx+col,x,fMem,uDivisor,hx,hy,nx,coef1,coef2,coef3,coef4) - x[row*nx+col]);
+                    }
+                }
+            }
+        }
+		
 		*timeSor += timestamp() - now; // Get iteration time.
 		now = timestamp(); // Start residue norm time counter.
 
@@ -233,7 +247,7 @@ int main(int argc, char *argv[]) {
             //fMem[i*nx+j] = f(i*nx+j,hx,hy,nx); // Please check those indexes. (looking to lines 181-185, it looks OK).
             //fMem[i*nx+j] = f(i*nx,j,hx,hy,nx);
             fMem[i*nx+j] = f(i,j,hx,hy,nx);
-            printf("%d - %d = %lf\n",i,j,fMem[i*nx+j]);
+            //printf("%d - %d = %lf\n",i,j,fMem[i*nx+j]);
         }
     }
 
@@ -286,6 +300,8 @@ Juntando u(i+1,j) com u(i+1,j), etc.
 u(i+1,j)/Δx² + u(i-1,j)/Δx² + u(i,j+1)/Δy² + u(i,j-1)/Δy² -u(i+1,j)/2Δx + u(i-1,j)/2Δx -u(i,j+1)2Δy + u(i,j-1)/2Δy =
 
 u(i+1,j)/Δx² -u(i+1,j)/2Δx + u(i-1,j)/Δx² + u(i-1,j)/2Δx + u(i,j+1)/Δy² -u(i,j+1)2Δy + u(i,j-1)/Δy² + u(i,j-1)/2Δy =
+
+u(i+1,j) * (1/Δx² - 1/2Δx)
 
 u(i+1,j) * 1/(Δx²-2Δx) + u(i-1,j) * 1/(Δx²+2Δx) + u(i,j+1) * 1/(Δy²-2Δy) + u(i,j-1) * 1/(Δy²+2Δy)
            A                        B                        C                        D
