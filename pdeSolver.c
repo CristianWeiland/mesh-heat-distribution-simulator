@@ -60,13 +60,20 @@ f(x,y) = 4π²[ sin(2πx)sinh(πy) + sin(2π(π−x))sinh(π(π−y)) ]
 	return (4*M_PI*M_PI * ( (sin(2*M_PI*x)) * (sinh(M_PI*y)) + (sin(2*M_PI*(M_PI-x))) * (sinh(M_PI*(M_PI-y))) ));
 }
 
-double calcU(int n, double *u, double *fMem, double uDivisor, double hx, double hy, int nx) {
+inline double calcU(int n, double *u, double *fMem, double uDivisor, double hx, double hy, int nx, double coef1, double coef2, double coef3, double coef4) {
 //double calcU(int n, double *u, double uDivisor, double hx, double hy, int nx) {
 /*
 Final version of simplified equation:
 u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
          --------------------------------------------------------------------------------------------------------------------
-                                                          2/Δx² + 2/Δy² + 4π²
+                                                        2/Δx² + 2/Δy² + 4π²
+Final version 2:
+
+                             coef[0]                   coef[1]                   coef[2]                   coef[3]
+u(i,j) = f(x,y) + u(i+1,j) * 1/(Δx(Δx-2)) + u(i-1,j) * 1/(Δx(Δx+2)) + u(i,j+1) * 1/(Δy(Δy-2)) + u(i,j-1) * 1/(Δy(Δy+2))
+         --------------------------------------------------------------------------------------------------------------
+                                                        2/Δx² + 2/Δy² + 4π²
+
 */
 /*
 	double res = 0;
@@ -76,11 +83,14 @@ u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-
 	res = res / uDivisor;
 	return res;
 */
+/*
 	return ((fMem[n] + (u[n+nx] + u[n-nx] ) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy) + (u[n-nx] - u[n+nx])
 			 / (2 * hx) + (u[n-1] - u[n+1]) / (2 * hy)) / uDivisor);
+*/
+    return ((fMem[n] + u[n+nx]*coef1 + u[n-nx]*coef2 + u[n-1]*coef4 + u[n+1]*coef3) / uDivisor);
 }
 
-double subsRow(int n, double *u, double uDivisor, double hx, double hy, int nx) {
+inline double subsRow(int n, double *u, double uDivisor, double hx, double hy, int nx, double coef1, double coef2, double coef3, double coef4) {
 /*
 f(x,y) =
 (2/Δx²+2/Δy²+4π²)*u(i,j) - ( (u(i+1,j)+u(i-1,j))/Δx² + (u(i,j+1)+u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy) )
@@ -91,14 +101,23 @@ f(x,y) =
 	res -= ((u[n+nx] + u[n-nx]) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy) + (u[n-nx] - u[n+nx]) / (2 * hx) + (u[n-1] - u[n+1]) / (2 * hy));
 	return res;
 */
+/*
 	return uDivisor * u[n] - ((u[n+nx] + u[n-nx]) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy) + (u[n-nx] - u[n+nx])
 			/ (2 * hx) + (u[n-1] - u[n+1]) / (2 * hy));
+*/
+    return (uDivisor * u[n] - (u[n+nx]*coef1 + u[n-nx]*coef2 + u[n+1]*coef3 + u[n-1]*coef4));
 }
 
 void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
 //void sor(double *x, double *r, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
 	int i, j, k;
 	double sigma, now, fxy, res, maxRes = 0, tRes = 0; // maxRes is the biggest residue, tRes is total residue in this iteration.
+    double coef1, coef2, coef3, coef4;
+
+    coef1 = 1/(hx * (hx - 2));
+    coef2 = 1/(hx * (hx + 2));
+    coef3 = 1/(hy * (hy - 2));
+    coef4 = 1/(hy * (hy + 2));
 
 	for(k=0; k<maxI; ++k) {
 		now = timestamp(); // Starting iteration time counter.
@@ -108,7 +127,7 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 		}*/
 	    for(i=1; i<ny-1; ++i) { // Ignoring borders.
 	        for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
-	            x[i*nx+j] = x[i*nx+j] + w * (calcU(i*nx+j,x,fMem,uDivisor,hx,hy,nx) - x[i*nx+j]);
+	            x[i*nx+j] = x[i*nx+j] + w * (calcU(i*nx+j,x,fMem,uDivisor,hx,hy,nx,coef1,coef2,coef3,coef4) - x[i*nx+j]);
 	        }
 	    }
 
@@ -117,7 +136,7 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 
 	    for(i=1; i<ny-1; ++i) { // Ignoring borders.
 	        for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
-	            res = fMem[i*nx+j] - subsRow(i*nx+j,x,uDivisor,hx,hy,nx);
+	            res = fMem[i*nx+j] - subsRow(i*nx+j,x,uDivisor,hx,hy,nx,coef1,coef2,coef3,coef4);
 				if(res > maxRes)
 					maxRes = res;
 				tRes += res * res; // Adds res² to the total residue of this iteration.
@@ -230,3 +249,43 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
+
+/*
+6 A30 A31 A32 A33 A34
+5 A25 A26 A27 A28 A29
+4 A20 A21 A22 A23 A24
+3 A15 A16 A17 A18 A19
+2 A10 A11 A12 A13 A14
+1  A5  A6  A7  A8  A9
+0  A0  A1  A2  A3  A4
+    0   1   2   3   4
+
+Nx = 5
+Ny = 7
+
+*/
+//f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
+/*
+Final version of simplified equation:
+u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
+         --------------------------------------------------------------------------------------------------------------------
+                                                          2/Δx² + 2/Δy² + 4π²
+Juntando u(i+1,j) com u(i+1,j), etc.
+
+(2/Δx² + 2/Δy² + 4π²) * u(i,j) - f(x,y) =
+
+u(i+1,j)/Δx² + u(i-1,j)/Δx² + u(i,j+1)/Δy² + u(i,j-1)/Δy² -u(i+1,j)/2Δx + u(i-1,j)/2Δx -u(i,j+1)2Δy + u(i,j-1)/2Δy =
+
+u(i+1,j)/Δx² -u(i+1,j)/2Δx + u(i-1,j)/Δx² + u(i-1,j)/2Δx + u(i,j+1)/Δy² -u(i,j+1)2Δy + u(i,j-1)/Δy² + u(i,j-1)/2Δy =
+
+u(i+1,j) * 1/(Δx²-2Δx) + u(i-1,j) * 1/(Δx²+2Δx) + u(i,j+1) * 1/(Δy²-2Δy) + u(i,j-1) * 1/(Δy²+2Δy)
+           A                        B                        C                        D
+
+u(i+1,j) * 1/(Δx(Δx-2)) + u(i-1,j) * 1/(Δx(Δx+2)) + u(i,j+1) * 1/(Δy(Δy-2)) + u(i,j-1) * 1/(Δy(Δy+2))
+           A                        B                        C                        D
+
+A = 1/(hx * (hx - 2))
+B = 1/(hx * (hx + 2))
+C = 1/(hy * (hy - 2))
+D = 1/(hy * (hy + 2))
+*/
