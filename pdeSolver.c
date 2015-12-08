@@ -110,7 +110,7 @@ f(x,y) =
 
 void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
 //void sor(double *x, double *r, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
-	int i, j, k;
+	int i, j, k, l, m, row, col;
 	double sigma, now, fxy, res, maxRes = 0, tRes = 0; // maxRes is the biggest residue, tRes is total residue in this iteration.
     double coef1, coef2, coef3, coef4;
 
@@ -125,11 +125,24 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 			x[i] = x[i] + w * (calcU(i,x,fMem,uDivisor,hx,hy,nx) - x[i]);
             //x[i] = x[i] + w * (calcU(i,x,uDivisor,hx,hy,nx) - x[i]);
 		}*/
+        /*
 	    for(i=1; i<ny-1; ++i) { // Ignoring borders.
 	        for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
 	            x[i*nx+j] = x[i*nx+j] + w * (calcU(i*nx+j,x,fMem,uDivisor,hx,hy,nx,coef1,coef2,coef3,coef4) - x[i*nx+j]);
 	        }
 	    }
+        */
+        for(i=1; i<ny-1; i+=BLOCK_SIZE) {
+            for(j=1; j<nx-1; j+=BLOCK_SIZE) {
+                for(l=0; l<BLOCK_SIZE && l+i<ny-1; ++l) {
+                    for(m=0; m<BLOCK_SIZE && m+j<nx-1; ++m) {
+                        row = i+l;
+                        col = j+m;
+                        x[row*nx+col] = x[row*nx+col] + w * (calcU(row*nx+col,x,fMem,uDivisor,hx,hy,nx,coef1,coef2,coef3,coef4) - x[row*nx+col]);
+                    }
+                }
+            }
+        }
 
 		*timeSor += timestamp() - now; // Get iteration time.
 		now = timestamp(); // Start residue norm time counter.
