@@ -162,6 +162,13 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr,"Could not allocate memory.");
 		exit(-5);
 	}
+/*
+    if((fMem = malloc((nx-1) * (ny-1) * sizeof(double))) == NULL) {
+        fprintf(stderr,"Could not allocate memory.");
+        exit(-5);
+    }
+    fMem -= nx; // Save some memory.
+*/
     if((fMem = malloc(nx * ny * sizeof(double))) == NULL) {
         fprintf(stderr,"Could not allocate memory.");
         exit(-5);
@@ -171,7 +178,6 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr,"Could not open file.");
 		exit(-6);
 	}
-
 
     timeSor = 0.0f;
     timeResNorm = 0.0f;
