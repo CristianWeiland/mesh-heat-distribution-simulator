@@ -56,7 +56,8 @@ double f(int i, int j, double hx, double hy, int nx) {
 f(x,y) = 4π²[ sin(2πx)sinh(πy) + sin(2π(π−x))sinh(π(π−y)) ]
 */
 	//int i = n % nx, j = n / nx;
-	double x = i * hx, y = j * hy;
+	//double x = i * hx, y = j * hy;
+	double x = j * hx, y = i * hy;
 	return (4*M_PI*M_PI * ( (sin(2*M_PI*x)) * (sinh(M_PI*y)) + (sin(2*M_PI*(M_PI-x))) * (sinh(M_PI*(M_PI-y))) ));
 }
 
@@ -76,8 +77,7 @@ u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-
 	res = res / uDivisor;
 	return res;
 */
-	return ((fMem[n] + (u[n+nx] + u[n-nx] ) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy) + (u[n-nx] - u[n+nx])
-			 / (2 * hx) + (u[n-1] - u[n+1]) / (2 * hy)) / uDivisor);
+	return ((fMem[n] + (u[n+nx] + u[n-nx] ) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy) + (u[n-nx] - u[n+nx]) / (2 * hx) + (u[n-1] - u[n+1]) / (2 * hy)) / uDivisor);
 }
 
 double subsRow(int n, double *u, double uDivisor, double hx, double hy, int nx) {
@@ -91,8 +91,7 @@ f(x,y) =
 	res -= ((u[n+nx] + u[n-nx]) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy) + (u[n-nx] - u[n+nx]) / (2 * hx) + (u[n-1] - u[n+1]) / (2 * hy));
 	return res;
 */
-	return uDivisor * u[n] - ((u[n+nx] + u[n-nx]) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy) + (u[n-nx] - u[n+nx])
-			/ (2 * hx) + (u[n-1] - u[n+1]) / (2 * hy));
+	return uDivisor * u[n] - ((u[n+nx] + u[n-nx]) / (hx * hx) + (u[n+1] + u[n-1]) / (hy * hy) + (u[n-nx] - u[n+nx]) / (2 * hx) + (u[n-1] - u[n+1]) / (2 * hy));
 }
 
 void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
@@ -172,7 +171,6 @@ int main(int argc, char *argv[]) {
 		exit(-6);
 	}
 
-
     timeSor = 0.0f;
     timeResNorm = 0.0f;
 
@@ -183,7 +181,7 @@ int main(int argc, char *argv[]) {
 	for(i = nx; i < nx * ny - nx; ++i) { // Initialize central points (with left and right borders) as 0.
 		x[i] = 0.0f;
 	}
-*/
+*/	
 	for(i = 1; i < ny - 1; ++i) { // This 'for' has to ignore borders.
 		for(j = 0; j < nx; ++j) {
 			x[i*nx+j] = 0.0f;
@@ -205,7 +203,9 @@ int main(int argc, char *argv[]) {
     for(i=1; i<ny-1; ++i) { // Ignoring borders.
         for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
             //fMem[i*nx+j] = f(i*nx+j,hx,hy,nx); // Please check those indexes. (looking to lines 181-185, it looks OK).
-            fMem[i*nx+j] = f(i*nx,j,hx,hy,nx);
+            //fMem[i*nx+j] = f(i*nx,j,hx,hy,nx);
+            fMem[i*nx+j] = f(i,j,hx,hy,nx);
+            printf("%d - %d = %lf\n",i,j,fMem[i*nx+j]);
         }
     }
 
