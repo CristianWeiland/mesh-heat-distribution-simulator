@@ -4,11 +4,11 @@
      # Arquivo final
     FILE = pdeSolver
 
-    CC = gcc -g
+    CC = gcc
     AR = ar -rcu
     INSTALL = install
-    OPTIMIZATION = -O2
-    #OPTIMIZATION = -O3 -mavx
+    #OPTIMIZATION = -O2
+    OPTIMIZATION = -O3 -mavx -march=native
 
 .PHONY: clean install all
 
