@@ -4,6 +4,7 @@
 #include <math.h>
 #include <errno.h>
 #include <time.h>
+#include <likwid.h>
 
 #define ARGS_NUM 9
 #define BLOCK_SIZE 3
