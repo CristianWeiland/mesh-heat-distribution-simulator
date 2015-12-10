@@ -12,82 +12,82 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.05 -hy 0.05 -i 20 -o gra
 ---------
 
 10 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o graph
 
 100 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o graph
 
 127 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o graph
 
 128 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o graph
 
 200 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o graph
 
 255 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 -o graph
 
 256 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o graph
 
 500 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph
 
 511 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 -o graph
 
 512 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 -o graph
 
 1000 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 20 -o graph
 
 1023 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 20 -o graph
 
 1024 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 -o graph
 
 2000 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i 20 -o graph
 
 2047 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i 20 -o graph
 
 2048 Pontos
-likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 20 -o graph
 likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 20 -o graph
 likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 20 -o graph
 */
@@ -182,7 +182,7 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 
 	for(k=0; k<maxI; ++k) {
 		now = timestamp(); // Starting iteration time counter.
-		//LIKWID_MARKER_START("sor");
+		LIKWID_MARKER_START("sor");
 
         for(i=1; i<ny-1; i+=BLOCK_SIZE) {
             for(j=1; j<nx-1; j+=BLOCK_SIZE) {
@@ -196,10 +196,10 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
             }
         }
 
-        //LIKWID_MARKER_STOP("sor");
+        LIKWID_MARKER_STOP("sor");
 		*timeSor += timestamp() - now; // Get iteration time.
 		now = timestamp(); // Start residue norm time counter.
-		//LIKWID_MARKER_START("residue");
+		LIKWID_MARKER_START("residue");
 
 		tRes = 0.0f;
 
@@ -214,7 +214,7 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 
 		r[k] = sqrt(tRes); // Store the norm of the residue in a vector (r).
 
-        //LIKWID_MARKER_STOP("residue");
+        LIKWID_MARKER_STOP("residue");
 		*timeResNorm += timestamp() - now; // Get residue norm time.
 	}
 
@@ -229,7 +229,7 @@ int main(int argc, char *argv[]) {
 
 	fpExit = getParams(argc,argv,&hx,&hy,&maxI);
 
-    //LIKWID_MARKER_INIT;
+    LIKWID_MARKER_INIT;
 
 	nx = (round(M_PI/hx)) + 1;
 	ny = (round(M_PI/hy)) + 1;
@@ -305,7 +305,7 @@ int main(int argc, char *argv[]) {
 	fclose(fpExit);
 	fclose(fpData);
 
-    //LIKWID_MARKER_CLOSE;
+    LIKWID_MARKER_CLOSE;
 
 	return 0;
 }
