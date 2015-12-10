@@ -1,13 +1,95 @@
 #include "header.h"
-
 /*
-Final version of simplified equation:
-u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
-         --------------------------------------------------------------------------------------------------------------------
-                                                          2/Δx² + 2/Δy² + 4π²
-Residue:
-f(x,y) =
-(2/Δx² + 2/Δy² + 4π²)*u(i,j) - ( (u(i+1,j)+u(i-1,j))/Δx² + (u(i,j+1)+u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy )
+Banda de Memória: utilizar o grupo MEM do likwid, e apresentar o resultado de "Memory bandwidth [MBytes/s]";
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.05 -hy 0.05 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+
+Cache miss: utilizar o grupo CACHE do likwid, e apresentar o resultado de "data cache miss ratio";
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.05 -hy 0.05 -i 20 -o graph
+
+Operações aritméticas: utilizar o grupo FLOPS_DP do likwid, e apresentar o resultado de "DP MFLOP/s";
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.05 -hy 0.05 -i 20 -o graph
+
+---------
+
+10 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o graph
+
+100 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o graph
+
+127 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o graph
+
+128 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o graph
+
+200 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o graph
+
+255 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 -o graph
+
+256 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o graph
+
+500 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph
+
+511 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 -o graph
+
+512 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 -o graph
+
+1000 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 20 -o graph
+
+1023 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 20 -o graph
+
+1024 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 -o graph
+
+2000 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i 20 -o graph
+
+2047 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i 20 -o graph
+
+2048 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 20 -o graph
 */
 
 double timestamp(void) {
@@ -16,152 +98,219 @@ double timestamp(void) {
     return((double)(tp.tv_sec + tp.tv_usec/1000000.0));
 }
 
-void getParams(int argc, char* argv[]) {
+FILE* getParams(int argc, char* argv[], double *hx, double *hy, int *maxI) {
     if(argc != ARGS_NUM) {
         fprintf(stderr,"Wrong number of arguments.\n");
         exit(-1);
     }
+
     int i;
     FILE *fp;
+
     for(i=1; i<ARGS_NUM; i+=2) {
         if(strcmp(argv[i],"-hx") == 0) {
-            Hx = atof(argv[i+1]);
+            *hx = atof(argv[i+1]);
+            if(*hx <= 0.0f) {
+            	fprintf(stderr,"Distance should not be less than 0.\n");
+            	exit(-4);
+            }
         } else if(strcmp(argv[i],"-hy") == 0) {
-            Hy = atof(argv[i+1]);
+            *hy = atof(argv[i+1]);
+            if(*hy <= 0.0f) {
+            	fprintf(stderr,"Distance should not be less than 0.\n");
+            	exit(-4);
+            }
         } else if(strcmp(argv[i],"-i") == 0) {
-            MaxI = atoi(argv[i+1]);
+            *maxI = atoi(argv[i+1]);
+            if(*maxI < 1) {
+            	fprintf(stderr,"You need to do at least 1 iteration.\n");
+            	exit(-3);
+            }
         } else if(strcmp(argv[i],"-o") == 0) {
-            fp = fopen(argv[i+1],"w");
+			if((fp = fopen(argv[i+1],"w")) == NULL) {
+				fprintf(stderr,"Could not open file.");
+				exit(-6);
+			}
             fprintf(fp,"splot \"solution.dat\"\npause -1");
         } else {
             fprintf(stderr,"Incorrect parameter.\n");
-            exit(-1);
+            exit(-2);
         }
     }
+
+    return fp;
 }
 
-double f(int n) {
-	int i = n / Nx, j = n % Nx;
-	double x = i * Hx, y = j * Hy;
-	return (4 * M_PI * M_PI * ( (sin(2 * M_PI * x)) * (sinh(M_PI * y)) + (sin(2 * M_PI * (M_PI - x))) * (sinh(M_PI * (M_PI - y))) ));
+double f(int i, int j, double hx, double hy, int nx) {
+/* f(x,y) = 4π²[ sin(2πx)sinh(πy) + sin(2π(π−x))sinh(π(π−y)) ] */
+	double x = j * hx, y = i * hy;
+	return (4*M_PI*M_PI * ( (sin(2*M_PI*x)) * (sinh(M_PI*y)) + (sin(2*M_PI*(M_PI-x))) * (sinh(M_PI*(M_PI-y))) ));
 }
 
-double calcU(int n, double *u) {
+inline double calcU(int n, double *u, double *fMem, double uDivisor, double hx, double hy, int nx, double coef1, double coef2, double coef3, double coef4) {
 /*
-u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
-         --------------------------------------------------------------------------------------------------------------------
-                                                          2/Δx² + 2/Δy² + 4π²
+Final version of simplified equation:
+                            coef1                    coef2                      coef3                    coef4
+u(i,j) = f(x,y) + u(i+1,j)*(1/Δx²-1/2Δx) + u(i-1,j)*(1/Δx²+1/2Δx) + u(i,j+1)*1/(1/Δy²-1/2Δy) + u(i,j-1)*(1/Δy²+1/2Δy)
+         --------------------------------------------------------------------------------------------------------------
+                                                        2/Δx² + 2/Δy² + 4π²
 */
-	double res = 0;
-	res += f(n) + (u[n+Nx] + u[n-Nx] ) / (Hx * Hx) + (u[n+1] + u[n-1]) / (Hy * Hy);
-	res += (u[n-Nx] - u[n+Nx]) / (2 * Hx) + (u[n-1] - u[n+1]) / (2 * Hy);
-	res = res / UDivisor;
-	return res;
+	return ((fMem[n] + u[n+nx] * coef1 + u[n-nx] * coef2 + u[n+1] * coef3 + u[n-1] * coef4) / uDivisor);
 }
 
-double subsRow(int n, double *u) {
-//f(x,y) = (2/Δx² + 2/Δy² + 4π²) * u(i,j) - ((u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy)
-	double res = 0;
-	res = UDivisor * u[n];
-	res -= ((u[n+Nx] + u[n-Nx]) / (Hx * Hx) + (u[n+1] + u[n-1]) / (Hy * Hy) + (u[n-Nx] - u[n+Nx]) / (2 * Hx) + (u[n-1] - u[n+1]) / (2 * Hy));
-	return res;
+inline double subsRow(int n, double *u, double uDivisor, double hx, double hy, int nx, double coef1, double coef2, double coef3, double coef4) {
+/*
+f(x,y) =
+(2/Δx²+2/Δy²+4π²)*u(i,j) - ( (u(i+1,j)+u(i-1,j))/Δx² + (u(i,j+1)+u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy) )
+*/
+/*
+2/Δx²+2/Δy²+4π² * u(i,j) = f(x,y) + u(i+1,j) * 1/(Δx(Δx-2)) + u(i-1,j) * 1/(Δx(Δx+2)) + u(i,j+1) * 1/(Δy(Δy-2)) + u(i,j-1) * 1/(Δy(Δy+2))
+f(x,y) = 2/Δx²+2/Δy²+4π² * u(i,j) - (u(i+1,j) * 1/(Δx(Δx-2)) + u(i-1,j) * 1/(Δx(Δx+2)) + u(i,j+1) * 1/(Δy(Δy-2)) + u(i,j-1) * 1/(Δy(Δy+2)))
+*/
+    return (uDivisor * u[n] + (-1 * (u[n+nx]*coef1 + u[n-nx]*coef2 + u[n+1]*coef3 + u[n-1]*coef4)));
 }
 
-void sor(double *x, double *r, double *timeSor, double *timeResNorm) {
-	int i,j,k;
-	double sigma, now, fxy, res, maxRes = 0, tRes = 0; // maxRes is the biggest residue, tRes is total residue in this iteration.
-	for(k=0; k<MaxI; k++) { // Iterate MaxI times.
+void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
+	int i, j, k, l, m, row, col;
+	double now, res, tRes, maxRes = 0; // tRes is total residue in this iteration, maxRes is the biggest residue.
+    double coef1, coef2, coef3, coef4;
+
+    coef1 = (1/(hx*hx)) - (1/(2*hx)); // u(i+1,j)
+    coef2 = (1/(hx*hx)) + (1/(2*hx)); // u(i-1,j)
+    coef3 = (1/(hy*hy)) - (1/(2*hy)); // u(i,j+1)
+    coef4 = (1/(hy*hy)) + (1/(2*hy)); // u(i,j-1)
+
+	for(k=0; k<maxI; ++k) {
 		now = timestamp(); // Starting iteration time counter.
-		for(i = 1 + Nx; i < Nx * Ny - Nx - 1; ++i) { // Start at u[1][1], which means u[Ny+1] and do not calculate last row/column (they are borders)
-			x[i] = x[i] + W * (calcU(i,x) - x[i]);
-		}
+		//LIKWID_MARKER_START("sor");
+
+        for(i=1; i<ny-1; i+=BLOCK_SIZE) {
+            for(j=1; j<nx-1; j+=BLOCK_SIZE) {
+                for(l=0; l<BLOCK_SIZE && l+i<ny-1; ++l) {
+                    for(m=0; m<BLOCK_SIZE && m+j<nx-1; ++m) {
+                        row = i+l;
+                        col = j+m;
+                        x[row*nx+col] = x[row*nx+col] + w * (calcU(row*nx+col,x,fMem,uDivisor,hx,hy,nx,coef1,coef2,coef3,coef4) - x[row*nx+col]);
+                    }
+                }
+            }
+        }
+
+        //LIKWID_MARKER_STOP("sor");
 		*timeSor += timestamp() - now; // Get iteration time.
 		now = timestamp(); // Start residue norm time counter.
-		for(i = 1 + Nx; i < Nx * Ny - Nx - 1; ++i) {
-			res = f(i); // res = f(x,y)
-			res -= subsRow(i,x); // res = f(x,y) - (a0 * x0 + a1 * x1 + ... + an * xn)
-			if(res > maxRes)
-				maxRes = res;
-			tRes += res * res; // Adds res² to the total residue of this iteration.
-		}
+		//LIKWID_MARKER_START("residue");
+
+		tRes = 0.0f;
+
+	    for(i=1; i<ny-1; ++i) { // Ignoring borders.
+	        for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
+	            res = fMem[i*nx+j] - subsRow(i*nx+j,x,uDivisor,hx,hy,nx,coef1,coef2,coef3,coef4);
+				if(res > maxRes)
+					maxRes = res;
+				tRes += res * res; // Adds res² to the total residue of this iteration.
+	        }
+	    }
+
 		r[k] = sqrt(tRes); // Store the norm of the residue in a vector (r).
-		tRes = 0;
+
+        //LIKWID_MARKER_STOP("residue");
 		*timeResNorm += timestamp() - now; // Get residue norm time.
 	}
-	*timeSor = *timeSor / MaxI; // Get average values.
-	*timeResNorm = *timeResNorm / MaxI;
+
+	*timeSor = *timeSor / maxI; // Get average values.
+	*timeResNorm = *timeResNorm / maxI;
 }
 
 int main(int argc, char *argv[]) {
-	int i, j, k;
-	double sigma, *x, *r, *timeSor, *timeResNorm;
-	FILE *fpExit;
+	int i, j, nx, ny, maxI, alpha;
+	double hx, hy, w, beta, sigma, uDivisor, *x, *r, *fMem, timeSor, timeResNorm;
+	FILE *fpExit, *fpData;
 
-	getParams(argc,argv);
+	fpExit = getParams(argc,argv,&hx,&hy,&maxI);
 
-	Nx = (round(M_PI/Hx)) + 1;
-	Ny = (round(M_PI/Hy)) + 1;
-	W = 2 - ((Hx + Hy) / 2);
-	UDivisor = (2 / (Hx * Hx)) + (2 / (Hy * Hy)) + 4 * M_PI * M_PI;
+    //LIKWID_MARKER_INIT;
 
-	x = malloc(Nx * Ny * sizeof(double));
-	r = malloc(MaxI * sizeof(double));
-	timeSor = calloc(1,sizeof(double));
-	timeResNorm = calloc(1,sizeof(double));
-	fpExit = fopen("solution.dat","w");
+	nx = (round(M_PI/hx)) + 1;
+	ny = (round(M_PI/hy)) + 1;
+	printf("Nx = %d, Ny = %d\n",nx,ny);
+	w = 2 - ((hx + hy) / 2);
+	uDivisor = (2 / (hx * hx)) + (2 / (hy * hy)) + 4 * M_PI * M_PI;
 
-	sigma = sinh(M_PI * M_PI);
+	if((x = malloc(nx * ny * sizeof(double))) == NULL) {
+		fprintf(stderr,"Could not allocate memory.");
+		exit(-5);
+	}
+	if((r = malloc(maxI * sizeof(double))) == NULL) {
+		fprintf(stderr,"Could not allocate memory.");
+		exit(-5);
+	}
+/*
+    if((fMem = malloc((nx-1) * (ny-1) * sizeof(double))) == NULL) {
+        fprintf(stderr,"Could not allocate memory.");
+        exit(-5);
+    }
+    fMem -= nx; // Save some memory, but I will not be able to access fMem[0]..fMem[nx-1]!!
+*/
+    if((fMem = malloc(nx * ny * sizeof(double))) == NULL) {
+        fprintf(stderr,"Could not allocate memory.");
+        exit(-5);
+    }
 
-	for(i = Nx; i < Nx*Ny - Nx; ++i) { // Initialize central points (with left and right borders) as 0.
-		x[i] = 0.0f;
+	if((fpData = fopen("solution.dat","w")) == NULL) {
+		fprintf(stderr,"Could not open file.");
+		exit(-6);
 	}
 
-	for(i=0; i<Nx; ++i) { // Creating borders
-		x[i] = sin(2 * M_PI * (M_PI - (i * Hx))) * sigma;
-		x[Nx*Ny-Nx+i] = sin(2 * M_PI * (i * Hx)) * sigma;
+    timeSor = 0.0f;
+    timeResNorm = 0.0f;
+
+	for(i = 1; i < ny - 1; ++i) { // This 'for' has to ignore borders.
+		for(j = 0; j < nx; ++j) { // This 'for' cant ignore borders.
+			x[i*nx+j] = 0.0f;
+		}
 	}
 
-	sor(x,r,timeSor,timeResNorm);
+    sigma = sinh(M_PI * M_PI);
+    alpha = nx * ny - nx;
+    beta = 2 * M_PI * hx;
 
-	fprintf(fpExit,"###########\n# Tempo Método SOR: %lf\n# Tempo Resíduo: %lf\n\n# Norma do Resíduo\n",*timeSor,*timeResNorm);
-	for(i=0; i<MaxI; ++i) {
-		fprintf(fpExit,"# i=%d: %lf\n",i,r[i]);
+	for(i=0; i<nx; ++i) { // Creating borders
+        x[i] = sin(2 * M_PI * (M_PI - (i * hx))) * sigma;
+        x[alpha+i] = sin(beta * i) * sigma;
+	}
+
+	// Initializing f(x,y)
+    for(i=1; i<ny-1; ++i) { // Ignoring borders.
+        for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
+            fMem[i*nx+j] = f(i,j,hx,hy,nx);
+        }
+    }
+
+    sor(x,r,fMem,&timeSor,&timeResNorm,w,uDivisor,hx,hy,nx,ny,maxI);
+
+	fprintf(fpExit,"\n\n\n###########\n# Tempo Método SOR: %lf\n# Tempo Resíduo: %lf\n\n# Norma do Resíduo\n",timeSor,timeResNorm);
+
+	for(i=0; i<maxI; ++i) {
+		fprintf(fpExit,"# i=%d: %.15lf\n",i,r[i]);
 	}
 	fprintf(fpExit,"###########\n");
-	FILE *expected = fopen("expected.txt","w");
-/*
-	for(i = 0; i < Nx; ++i) { // Print bottom border.
-		printf("1- Salvando no indice %d %d, ponto %f %f\n",i,0,i*Hx,0.0f);
-		fprintf(fpExit, "%lf %lf %lf\n", i*Hx, 0.0f, x[i]);
-		fprintf(expected, "%lf %lf %lf\n", i*Hx, 0.0f, f(i));
-	}*/
-	for(i = 1; i < Ny - 1; ++i) { // Since im using subsRow, I cant start at position 0.
-		/*printf("2- Salvando no indice %d %d, ponto %f %f\n",0,i,0.0f,i*Hy);
-		fprintf(fpExit,"%lf %lf %lf\n", 0.0f, i*Hy, x[i*Nx]); // Left border.
-		fprintf(expected,"%lf %lf %lf\n", 0.0f, i*Hy, f(i*Nx)); // Left border.*/
-		for(j = 1; j < Nx - 1; ++j) {
-			//printf("3- Salvando no indice %d %d, ponto %f %f\n",j,i,j*Hx,i*Hy);
-			fprintf(fpExit,"%.15lf %.15lf %.15lf\n",j*Hx,i*Hy,subsRow(i*Nx+j, x));
-			fprintf(fpExit,"%.15lf %.15lf %.15lf\n",j*Hx,i*Hy,f(i*Nx+j));
+
+	for(i = 1; i < ny - 1; ++i) { // This 'for' has to ignore borders.
+		for(j = 1; j < nx - 1; ++j) {
+			fprintf(fpData,"%.15lf %.15lf %.15lf\n",j*hx,i*hy,x[i*nx+j]);
 		}
-		/*printf("4- Salvando no indice %d %d, ponto %f %f\n",Ny,i,M_PI,i*Hy);
-		fprintf(fpExit,"%lf %lf %lf\n", M_PI, i*Hy, x[i*Nx+Nx-1]); // Right border.
-		fprintf(expected,"%lf %lf %lf\n", M_PI, i*Hy, f(i*Nx+Nx-1)); // Right border.*/
-	}/*
-	for(i = 0; i < Nx; ++i) { // Print top border. We should check it.
-		printf("5- Salvando no indice %d %d, ponto %f %f\n",i,Ny,i*Hx,M_PI);
-		fprintf(fpExit, "%lf %lf %lf\n", i*Hx, M_PI, x[Nx*Ny - Nx + i]); // Top border.
-		fprintf(expected, "%lf %lf %lf\n", i*Hx, M_PI, f(Nx*Ny - Nx + i)); // Top border.
-	}*/
+	}
 
 	fclose(fpExit);
-	fclose(expected);
+	fclose(fpData);
+
+    //LIKWID_MARKER_CLOSE;
 
 	return 0;
 }
 
 /*
-
 6 A30 A31 A32 A33 A34
 5 A25 A26 A27 A28 A29
 4 A20 A21 A22 A23 A24
@@ -173,4 +322,32 @@ int main(int argc, char *argv[]) {
 
 Nx = 5
 Ny = 7
+
+*/
+//f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
+/*
+Final version of simplified equation:
+u(i,j) = f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
+         --------------------------------------------------------------------------------------------------------------------
+                                                          2/Δx² + 2/Δy² + 4π²
+Juntando u(i+1,j) com u(i+1,j), etc.
+
+(2/Δx² + 2/Δy² + 4π²) * u(i,j) - f(x,y) =
+
+u(i+1,j)/Δx² + u(i-1,j)/Δx² + u(i,j+1)/Δy² + u(i,j-1)/Δy² -u(i+1,j)/2Δx + u(i-1,j)/2Δx -u(i,j+1)2Δy + u(i,j-1)/2Δy =
+
+u(i+1,j)/Δx² -u(i+1,j)/2Δx + u(i-1,j)/Δx² + u(i-1,j)/2Δx + u(i,j+1)/Δy² -u(i,j+1)2Δy + u(i,j-1)/Δy² + u(i,j-1)/2Δy =
+
+u(i+1,j) * (1/Δx² - 1/2Δx)
+
+u(i+1,j) * 1/(Δx²-2Δx) + u(i-1,j) * 1/(Δx²+2Δx) + u(i,j+1) * 1/(Δy²-2Δy) + u(i,j-1) * 1/(Δy²+2Δy)
+           A                        B                        C                        D
+
+u(i+1,j) * 1/(Δx(Δx-2)) + u(i-1,j) * 1/(Δx(Δx+2)) + u(i,j+1) * 1/(Δy(Δy-2)) + u(i,j-1) * 1/(Δy(Δy+2))
+           A                        B                        C                        D
+
+A = 1/(hx * (hx - 2))
+B = 1/(hx * (hx + 2))
+C = 1/(hy * (hy - 2))
+D = 1/(hy * (hy + 2))
 */
