@@ -1,0 +1,2 @@
+set title 'Time Sor / Time Res'
+plot 'gv1timesor.dat' using 1:2 w l, 'gv2timesor.dat' using 1:2 w l, 'gv1timeres.dat' using 1:2 w l, 'gv2timeres.dat' using 1:2 w l
