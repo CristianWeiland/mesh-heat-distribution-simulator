@@ -7,7 +7,7 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o gra
 Result:
 SOR
 	Time: 0.000140
-	Memory Bandwidth: 1.007957e+04 
+	Memory Bandwidth: 1.007957e+04
 	Data Cache Miss Ratio: 9.412551e-02
 	DP MFLOP/s: 1.447379e+02
 
@@ -146,7 +146,7 @@ Residue
 	DP MFLOP/s: 1.379471e+03
 
 
-	
+
 500 Pontos
 ==========
 likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph

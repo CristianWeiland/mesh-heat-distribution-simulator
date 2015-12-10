@@ -1,2 +1,62 @@
-set title 'Time Sor / Time Res'
-plot 'gv1timesor.dat' using 1:2 w l, 'gv2timesor.dat' using 1:2 w l, 'gv1timeres.dat' using 1:2 w l, 'gv2timeres.dat' using 1:2 w l
+General Options:
+
+set termoption dash
+set xlabel 'Points'
+set ylabel 'Time (seconds)'
+set style line 1 lt 1 lc rgb 'red' lw 2
+set style line 2 lt 1 lc rgb "orange" lw 2
+set style line 3 lt 2 lc rgb "yellow" lw 2
+set style line 4 lt 2 lc rgb "green" lw 2
+
+--------------------------------------------
+Time:
+
+set title 'Time'
+
+plot 'timesor1.dat' u 1:2 w l t 'SOR - Version 1' ls 1\
+   , 'timesor2.dat' u 1:2 w l t 'SOR - Version 2' ls 2\
+   , 'timeres1.dat' u 1:2 w l t 'Residue - Version 1' ls 3\
+   , 'timeres2.dat' u 1:2 w l t 'Residue - Version 2' ls 4
+
+---------------------------------------------
+Memory Bandwidth
+
+set title 'Memory Bandwidth [MBytes/s]'
+
+plot 'membandwidthsor1.dat' u 1:2 w l t 'SOR - Version 1' ls 1\
+   , 'membandwidthsor2.dat' u 1:2 w l t 'SOR - Version 2' ls 2\
+   , 'membandwidthres1.dat' u 1:2 w l t 'Residue - Version 1' ls 3\
+   , 'membandwidthres2.dat' u 1:2 w l t 'Residue - Version 2' ls 4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Randoms (Nao usar):
+
+plot 'membandwidthsor1.dat' u 1:2 w l t 'SOR - Version 1' lc rgb 'black', 'membandwidthres1.dat' u 1:2 w l t 'SOR - Version 2' lc rgb 'black', 'membandwidthsor2.dat' u 1:2 w l t 'Residue - Version 1' lc rgb 'membandwidthres2', 'gv2timeres.dat' u 1:2 w l t 'Residue - Version 2' lc rgb 'black'
+
+plot 'gv1timesor.dat' u 1:2 w l t 'SOR - Version 1' lc rgb 'black', 'gv2timesor.dat' u 1:2 w l t 'SOR - Version 2' lc rgb 'black', 'gv1timeres.dat' u 1:2 w l t 'Residue - Version 1' ls 'dashed' lc rgb 'black', 'gv2timeres.dat' u 1:2 w l t 'Residue - Version 2' lc rgb 'black'
+
+plot 'gv1timesor.dat' u 1:2 w l t 'SOR - Version 1' lc rgb 'black'\
+, 'gv2timesor.dat' u 1:2 w l t 'SOR - Version 2' lc rgb 'black'\
+, 'gv1timeres.dat' u 1:2 w l t 'Residue - Version 1' ls 'dashed' lc rgb 'black'\
+, 'gv2timeres.dat' u 1:2 w l t 'Residue - Version 2' lc rgb 'black'
+
+set style line 1 lt 2 lc rgb "red" lw 3
+set style line 2 lt 2 lc rgb "orange" lw 2
+set style line 3 lt 2 lc rgb "yellow" lw 3
+set style line 4 lt 2 lc rgb "green" lw 2
