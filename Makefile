@@ -1,24 +1,30 @@
      # Diretorio base onde estarão os diretórios de biblioteca
     PREFIX = ./
 
+    FONTES=$(wildcard *.c)
+    OBJECTS=$(FONTES:.c=.o)
+
      # Arquivo final
     FILE = pdeSolver
 
     CC = gcc
-    AR = ar -rcu
-    INSTALL = install
-    FLAGS=-DLIKWID_PERFMON -O3 -mavx -march=native
-#    LIKWID = -llikwid -L/usr/lib -L/home/soft/likwid/lib -DLIKWID_PERFMON
+    #FLAGS = -DLIKWID_PERFMON -O3 -mavx -march=native -lm
+    FLAGS = -DLIKWID_PERFMON -O3 -lm -march=native
+    INCLUDE = -I/home/soft/likwid/include
+    LIKWID = -llikwid -L/usr/lib -L/home/soft/likwid/lib -DLIKWID_PERFMON
 
-.PHONY: clean install all
+.PHONY: all clean
 
 %.o:  %.c
-	$(CC) -c $(CFLAGS) $< -I/home/soft/likwid/include $(FLAGS)
+	$(CC) -c -o $< -I/home/soft/likwid/include $(FLAGS)
 
-all: install $(FILE).o
+all: pdeSolver
 
-$(FILE).o: $(FILE).c
-	$(CC) -static -o $(PREFIX)$(FILE) $(FILE).c -llikwid -L/usr/lib -L/home/soft/likwid/lib -lm $(FLAGS)
+$(FILE): $(OBJECTS)
+	$(CC) -o $@ $^ $(LIKWID) $(FLAGS)
+
+%.o: %.c
+	$(CC) -c $< -o $@ $(INCLUDE) $(FLAGS)
 
 clean:
 	@rm -f *% *.bak *~ *.o $(FILE) core *.swp

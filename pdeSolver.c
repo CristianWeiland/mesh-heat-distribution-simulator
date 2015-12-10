@@ -139,9 +139,9 @@ int main(int argc, char *argv[]) {
     double hx, hy, w, beta, sigma, uDivisor, *x, *r, *fMem, timeSor, timeResNorm;
     FILE *fpExit, *fpData;
 
-    fpExit = getParams(argc,argv,&hx,&hy,&maxI);
-
     LIKWID_MARKER_INIT;
+
+    fpExit = getParams(argc,argv,&hx,&hy,&maxI);
 
     nx = (round(M_PI/hx)) + 1;
     ny = (round(M_PI/hy)) + 1;
