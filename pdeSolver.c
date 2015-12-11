@@ -141,13 +141,13 @@ FILE* getParams(int argc, char* argv[], double *hx, double *hy, int *maxI) {
     return fp;
 }
 
-double f(int i, int j, double hx, double hy, int nx) {
+inline double f(int i, int j, double hx, double hy) {
 /* f(x,y) = 4π²[ sin(2πx)sinh(πy) + sin(2π(π−x))sinh(π(π−y)) ] */
-	double x = j * hx, y = i * hy;
+	//double x = j * hx, y = i * hy;
 	return (4*M_PI*M_PI * ( (sin(2*M_PI*x)) * (sinh(M_PI*y)) + (sin(2*M_PI*(M_PI-x))) * (sinh(M_PI*(M_PI-y))) ));
 }
 
-inline double calcU(int n, double *u, double *fMem, double uDivisor, double hx, double hy, int nx, double coef1, double coef2, double coef3, double coef4) {
+inline double calcU(int n, double *u, double *fMem, double divided, double hx, double hy, int nx, double coef1, double coef2, double coef3, double coef4) {
 /*
 Final version of simplified equation:
                             coef1                    coef2                      coef3                    coef4
@@ -155,7 +155,7 @@ u(i,j) = f(x,y) + u(i+1,j)*(1/Δx²-1/2Δx) + u(i-1,j)*(1/Δx²+1/2Δx) + u(i,j+
          --------------------------------------------------------------------------------------------------------------
                                                         2/Δx² + 2/Δy² + 4π²
 */
-	return ((fMem[n] + u[n+nx] * coef1 + u[n-nx] * coef2 + u[n+1] * coef3 + u[n-1] * coef4) / uDivisor);
+	return ((fMem[n] + u[n+nx] * coef1 + u[n-nx] * coef2 + u[n+1] * coef3 + u[n-1] * coef4) * divided);
 }
 
 inline double subsRow(int n, double *u, double uDivisor, double hx, double hy, int nx, double coef1, double coef2, double coef3, double coef4) {
@@ -170,27 +170,33 @@ f(x,y) = 2/Δx²+2/Δy²+4π² * u(i,j) - (u(i+1,j) * 1/(Δx(Δx-2)) + u(i-1,j) 
     return (uDivisor * u[n] + (-1 * (u[n+nx]*coef1 + u[n-nx]*coef2 + u[n+1]*coef3 + u[n-1]*coef4)));
 }
 
-void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
-	int i, j, k, l, m, row, col;
-	double now, res, tRes, maxRes = 0; // tRes is total residue in this iteration, maxRes is the biggest residue.
+void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI, int e) {
+	int i, j, k, l, m, row, inx, index, nxe;
+
+	double now, res, tRes, maxRes = 0, divided; // tRes is total residue in this iteration, maxRes is the biggest residue.
     double coef1, coef2, coef3, coef4;
+    e=0;
 
     coef1 = (1/(hx*hx)) - (1/(2*hx)); // u(i+1,j)
     coef2 = (1/(hx*hx)) + (1/(2*hx)); // u(i-1,j)
     coef3 = (1/(hy*hy)) - (1/(2*hy)); // u(i,j+1)
     coef4 = (1/(hy*hy)) + (1/(2*hy)); // u(i,j-1)
 
+    nxe = nx + e;
+    divided = 1 / uDivisor;
+
 	for(k=0; k<maxI; ++k) {
 		now = timestamp(); // Starting iteration time counter.
 		LIKWID_MARKER_START("sor");
 
         for(i=1; i<ny-1; i+=BLOCK_SIZE) {
+            inx = i*nxe;
             for(j=1; j<nx-1; j+=BLOCK_SIZE) {
-                for(l=0; l<BLOCK_SIZE && l+i<ny-1; ++l) {
-                    for(m=0; m<BLOCK_SIZE && m+j<nx-1; ++m) {
-                        row = i+l;
-                        col = j+m;
-                        x[row*nx+col] = x[row*nx+col] + w * (calcU(row*nx+col,x,fMem,uDivisor,hx,hy,nx,coef1,coef2,coef3,coef4) - x[row*nx+col]);
+                for(l=0; l<BLOCK_SIZE && (l+i)<ny-1; ++l) {
+                    row = inx + l * nxe; // Fused multiply add?
+                    for(m=0; m<BLOCK_SIZE && (m+j)<nx-1; ++m) {
+                        index = row+j+m;
+                        x[index] = x[index] + w * (calcU(index,x,fMem,divided,hx,hy,nxe,coef1,coef2,coef3,coef4) - x[index]);
                     }
                 }
             }
@@ -203,12 +209,13 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 
 		tRes = 0.0f;
 
-	    for(i=1; i<ny-1; ++i) { // Ignoring borders.
+	    for(i=1; i<ny-1; ++i) { // Ignoring borders
+            index = i * nxe;
 	        for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
-	            res = fMem[i*nx+j] - subsRow(i*nx+j,x,uDivisor,hx,hy,nx,coef1,coef2,coef3,coef4);
+	            res = fMem[index+j] - subsRow(index+j,x,uDivisor,hx,hy,nxe,coef1,coef2,coef3,coef4);
 				if(res > maxRes)
 					maxRes = res;
-				tRes += res * res; // Adds res² to the total residue of this iteration.
+				tRes = tRes + res * res; // Adds res² to the total residue of this iteration.
 	        }
 	    }
 
@@ -223,7 +230,7 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 }
 
 int main(int argc, char *argv[]) {
-	int i, j, nx, ny, maxI, alpha;
+	int e=0, i, j, nx, ny, maxI, alpha, n, a;
 	double hx, hy, w, beta, sigma, uDivisor, *x, *r, *fMem, timeSor, timeResNorm;
 	FILE *fpExit, *fpData;
 
@@ -237,7 +244,15 @@ int main(int argc, char *argv[]) {
 	w = 2 - ((hx + hy) / 2);
 	uDivisor = (2 / (hx * hx)) + (2 / (hy * hy)) + 4 * M_PI * M_PI;
 
-	if((x = malloc(nx * ny * sizeof(double))) == NULL) {
+    /*for(e = 1, n = nx, a = 1, i = 0; i < 32; ++i) {
+        if(((n & a) != n) && ((n & a) != 0))
+            e = 0;
+        a = a << 1;
+    }*/
+    if(nx % 32 == 0) e = 1;
+    printf("nx = %d, ny = %d, e = %d\n",nx,ny,e);
+
+	if((x = malloc((nx + e) * ny * sizeof(double))) == NULL) {
 		fprintf(stderr,"Could not allocate memory.");
 		exit(-5);
 	}
@@ -245,14 +260,8 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr,"Could not allocate memory.");
 		exit(-5);
 	}
-/*
-    if((fMem = malloc((nx-1) * (ny-1) * sizeof(double))) == NULL) {
-        fprintf(stderr,"Could not allocate memory.");
-        exit(-5);
-    }
-    fMem -= nx; // Save some memory, but I will not be able to access fMem[0]..fMem[nx-1]!!
-*/
-    if((fMem = malloc(nx * ny * sizeof(double))) == NULL) {
+
+    if((fMem = malloc((nx + e) * ny * sizeof(double))) == NULL) {
         fprintf(stderr,"Could not allocate memory.");
         exit(-5);
     }
@@ -266,8 +275,9 @@ int main(int argc, char *argv[]) {
     timeResNorm = 0.0f;
 
 	for(i = 1; i < ny - 1; ++i) { // This 'for' has to ignore borders.
+        n = i*nx;
 		for(j = 0; j < nx; ++j) { // This 'for' cant ignore borders.
-			x[i*nx+j] = 0.0f;
+			x[n+j] = 0.0f;
 		}
 	}
 
@@ -282,12 +292,13 @@ int main(int argc, char *argv[]) {
 
 	// Initializing f(x,y)
     for(i=1; i<ny-1; ++i) { // Ignoring borders.
+        n = i * nx;
         for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
-            fMem[i*nx+j] = f(i,j,hx,hy,nx);
+            fMem[n+j] = f(i,j,hx,hy);
         }
     }
 
-    sor(x,r,fMem,&timeSor,&timeResNorm,w,uDivisor,hx,hy,nx,ny,maxI);
+    sor(x,r,fMem,&timeSor,&timeResNorm,w,uDivisor,hx,hy,nx,ny,maxI,e);
 
 	fprintf(fpExit,"\n\n\n###########\n# Tempo Método SOR: %lf\n# Tempo Resíduo: %lf\n\n# Norma do Resíduo\n",timeSor,timeResNorm);
 
@@ -297,8 +308,10 @@ int main(int argc, char *argv[]) {
 	fprintf(fpExit,"###########\n");
 
 	for(i = 1; i < ny - 1; ++i) { // This 'for' has to ignore borders.
+        beta = i*hy;
+        n = i*nx;
 		for(j = 1; j < nx - 1; ++j) {
-			fprintf(fpData,"%.15lf %.15lf %.15lf\n",j*hx,i*hy,x[i*nx+j]);
+			fprintf(fpData,"%.15lf %.15lf %.15lf\n",j*hx,beta,x[n+j]);
 		}
 	}
 
@@ -322,6 +335,20 @@ int main(int argc, char *argv[]) {
 
 Nx = 5
 Ny = 7
+
+
+6 A24 A25 A26 A27
+5 A20 A21 A22 A23
+4 A16 A17 A18 A29
+3 A12 A13 A14 A15
+2  A8  A9 A10 A11
+1  A4  A5  A6  A7
+0  A0  A1  A2  A3
+    0   1   2   3
+
+Nx = 4
+Ny = 7
+
 
 */
 //f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
