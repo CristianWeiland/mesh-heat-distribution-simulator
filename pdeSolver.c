@@ -49,7 +49,7 @@ FILE* getParams(int argc, char* argv[], double *hx, double *hy, int *maxI) {
     return fp;
 }
 
-double f(int i, int j, double hx, double hy, int nx) {
+double f(int i, int j, double hx, double hy) {
 /* f(x,y) = 4π²[ sin(2πx)sinh(πy) + sin(2π(π−x))sinh(π(π−y)) ] */
 	double x = j * hx, y = i * hy;
 	return (4*M_PI*M_PI * ( (sin(2*M_PI*x)) * (sinh(M_PI*y)) + (sin(2*M_PI*(M_PI-x))) * (sinh(M_PI*(M_PI-y))) ));
@@ -78,7 +78,7 @@ f(x,y) = 2/Δx²+2/Δy²+4π² * u(i,j) - (u(i+1,j) * 1/(Δx(Δx-2)) + u(i-1,j) 
     return (uDivisor * u[n] + (-1 * (u[n+nx]*coef1 + u[n-nx]*coef2 + u[n+1]*coef3 + u[n-1]*coef4)));
 }
 
-void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI) {
+void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI, int e) {
 	int i, j, k, l, m, row, col;
 	double now, res, tRes, maxRes = 0; // tRes is total residue in this iteration, maxRes is the biggest residue.
     double coef1, coef2, coef3, coef4;
@@ -97,7 +97,7 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
                     for(m=0; m<BLOCK_SIZE && m+j<nx-1; ++m) {
                         row = i+l;
                         col = j+m;
-                        x[row*nx+col] = x[row*nx+col] + w * (calcU(row*nx+col,x,fMem,uDivisor,hx,hy,nx,coef1,coef2,coef3,coef4) - x[row*nx+col]);
+                        x[row*(nx+e)+col] = x[row*(nx+e)+col] + w * (calcU(row*(nx+e)+col,x,fMem,uDivisor,hx,hy,nx+e,coef1,coef2,coef3,coef4) - x[row*(nx+e)+col]);
                     }
                 }
             }
@@ -110,7 +110,7 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 
 	    for(i=1; i<ny-1; ++i) { // Ignoring borders.
 	        for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
-	            res = fMem[i*nx+j] - subsRow(i*nx+j,x,uDivisor,hx,hy,nx,coef1,coef2,coef3,coef4);
+	            res = fMem[i*(nx+e)+j] - subsRow(i*(nx+e)+j,x,uDivisor,hx,hy,nx+e,coef1,coef2,coef3,coef4);
 				if(res > maxRes)
 					maxRes = res;
 				tRes += res * res; // Adds res² to the total residue of this iteration.
@@ -127,7 +127,7 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 }
 
 int main(int argc, char *argv[]) {
-	int i, j, nx, ny, maxI, alpha;
+	int e, i, j, nx, ny, maxI, alpha, n, a;
 	double hx, hy, w, beta, sigma, uDivisor, *x, *r, *fMem, timeSor, timeResNorm;
 	FILE *fpExit, *fpData;
 
@@ -138,7 +138,19 @@ int main(int argc, char *argv[]) {
 	w = 2 - ((hx + hy) / 2);
 	uDivisor = (2 / (hx * hx)) + (2 / (hy * hy)) + 4 * M_PI * M_PI;
 
-	if((x = malloc(nx * ny * sizeof(double))) == NULL) {
+    for(e = 1, n = nx, a = 1, i = 0; i < 32; ++i){
+        if((n & a != n) && (n & a != 0))
+            e = 0;
+        a = a << 1;
+    }
+/*
+    while(pot > 1 && ((pot % 2) == 0))
+        pot = pot / 2;
+    e = (pot == 1) ? 1 : 0; // Trying to avoid cache trashing.
+*/
+    printf("e = %d\n");
+
+	if((x = malloc((nx + e) * ny * sizeof(double))) == NULL) {
 		fprintf(stderr,"Could not allocate memory.");
 		exit(-5);
 	}
@@ -146,14 +158,8 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr,"Could not allocate memory.");
 		exit(-5);
 	}
-/*
-    if((fMem = malloc((nx-1) * (ny-1) * sizeof(double))) == NULL) {
-        fprintf(stderr,"Could not allocate memory.");
-        exit(-5);
-    }
-    fMem -= nx; // Save some memory, but I will not be able to access fMem[0]..fMem[nx-1]!!
-*/
-    if((fMem = malloc(nx * ny * sizeof(double))) == NULL) {
+
+    if((fMem = malloc((nx + e) * ny * sizeof(double))) == NULL) {
         fprintf(stderr,"Could not allocate memory.");
         exit(-5);
     }
@@ -168,7 +174,7 @@ int main(int argc, char *argv[]) {
 
 	for(i = 1; i < ny - 1; ++i) { // This 'for' has to ignore borders.
 		for(j = 0; j < nx; ++j) { // This 'for' cant ignore borders.
-			x[i*nx+j] = 0.0f;
+			x[i*(nx+e)+j] = 0.0f;
 		}
 	}
 
@@ -184,11 +190,11 @@ int main(int argc, char *argv[]) {
 	// Initializing f(x,y)
     for(i=1; i<ny-1; ++i) { // Ignoring borders.
         for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
-            fMem[i*nx+j] = f(i,j,hx,hy,nx);
+            fMem[i*(nx+e)+j] = f(i,j,hx,hy);
         }
     }
 
-    sor(x,r,fMem,&timeSor,&timeResNorm,w,uDivisor,hx,hy,nx,ny,maxI);
+    sor(x,r,fMem,&timeSor,&timeResNorm,w,uDivisor,hx,hy,nx,ny,maxI,e);
 
 	fprintf(fpExit,"\n\n\n###########\n# Tempo Método SOR: %lf\n# Tempo Resíduo: %lf\n\n# Norma do Resíduo\n",timeSor,timeResNorm);
 
@@ -199,7 +205,7 @@ int main(int argc, char *argv[]) {
 
 	for(i = 1; i < ny - 1; ++i) { // This 'for' has to ignore borders.
 		for(j = 1; j < nx - 1; ++j) {
-			fprintf(fpData,"%.15lf %.15lf %.15lf\n",j*hx,i*hy,x[i*nx+j]);
+			fprintf(fpData,"%.15lf %.15lf %.15lf\n",j*hx,i*hy,x[i*(nx+e)+j]);
 		}
 	}
 
