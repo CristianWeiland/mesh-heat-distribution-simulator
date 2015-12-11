@@ -205,10 +205,10 @@ int main(int argc, char *argv[]) {
 	fprintf(fpExit,"###########\n");
 
 	for(i = 1; i < ny - 1; ++i) { // This 'for' has to ignore borders.
-        a = i*hy;
+        beta = i*hy;
         n = i*(nx+e);
 		for(j = 1; j < nx - 1; ++j) {
-			fprintf(fpData,"%.15lf %.15lf %.15lf\n",j*hx,a,x[n+j]);
+			fprintf(fpData,"%.15lf %.15lf %.15lf\n",j*hx,beta,x[n+j]);
 		}
 	}
 
