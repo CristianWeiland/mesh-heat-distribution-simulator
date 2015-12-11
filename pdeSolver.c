@@ -96,9 +96,9 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
         for(i=1; i<ny-1; i+=BLOCK_SIZE) {
             inx = i*nxe;
             for(j=1; j<nx-1; j+=BLOCK_SIZE) {
-                for(l=0; l<BLOCK_SIZE && l+i<ny-1; ++l) {
+                for(l=0; l<BLOCK_SIZE && (l+i)<ny-1; ++l) {
                     row = inx + l * nxe; // Fused multiply add?
-                    for(m=0; m<BLOCK_SIZE && m+j<nx-1; ++m) {
+                    for(m=0; m<BLOCK_SIZE && (m+j)<nx-1; ++m) {
                         index = row+j+m;
                         x[index] = x[index] + w * (calcU(index,x,fMem,divided,hx,hy,nxe,coef1,coef2,coef3,coef4) - x[index]);
                     }
@@ -117,7 +117,7 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 	            res = fMem[index+j] - subsRow(index+j,x,uDivisor,hx,hy,nxe,coef1,coef2,coef3,coef4);
 				if(res > maxRes)
 					maxRes = res;
-				tRes += res * res; // Adds res² to the total residue of this iteration.
+				tRes = tRes + res * res; // Adds res² to the total residue of this iteration.
 	        }
 	    }
 
@@ -205,10 +205,10 @@ int main(int argc, char *argv[]) {
 	fprintf(fpExit,"###########\n");
 
 	for(i = 1; i < ny - 1; ++i) { // This 'for' has to ignore borders.
-        a = i*hy;
+        beta = i*hy;
         n = i*(nx+e);
 		for(j = 1; j < nx - 1; ++j) {
-			fprintf(fpData,"%.15lf %.15lf %.15lf\n",j*hx,a,x[n+j]);
+			fprintf(fpData,"%.15lf %.15lf %.15lf\n",j*hx,beta,x[n+j]);
 		}
 	}
 
@@ -230,6 +230,20 @@ int main(int argc, char *argv[]) {
 
 Nx = 5
 Ny = 7
+
+
+6 A24 A25 A26 A27
+5 A20 A21 A22 A23
+4 A16 A17 A18 A29
+3 A12 A13 A14 A15
+2  A8  A9 A10 A11
+1  A4  A5  A6  A7
+0  A0  A1  A2  A3
+    0   1   2   3
+
+Nx = 4
+Ny = 7
+
 
 */
 //f(x,y) + (u(i+1,j) + u(i-1,j))/Δx² + (u(i,j+1) + u(i,j-1))/Δy² + (-u(i+1,j)+u(i-1,j))/2Δx + (-u(i,j+1)+u(i,j-1))/2Δy
