@@ -1,3 +1,12 @@
+Tutorial (Leia essa porra antes de sair tentando, Sr. Romano):
+1- Executa os 7 comandos do General Options.
+2- Escolhe um dos 4 e executa.
+Sim, os graficos tao feios, seja o designer.
+Olha o grafico de Cache Miss Ratio. Os pontos potencia de 2 tao um lixo (256, 512, 1024, 2048).
+Acho que vamos ter que tirar esse cache trashing, se nao o Daniel vai estuprar a gente no trabalho.
+
+
+
 General Options:
 
 set termoption dash
@@ -29,34 +38,23 @@ plot 'membandwidthsor1.dat' u 1:2 w l t 'SOR - Version 1' ls 1\
    , 'membandwidthres2.dat' u 1:2 w l t 'Residue - Version 2' ls 4
 
 
+---------------------------------------------
+Data Cache Miss Ratio
+
+set title 'Data Cache Miss Ratio'
+
+plot 'cachesor1.dat' u 1:2 w l t 'SOR - Version 1' ls 1\
+   , 'cachesor2.dat' u 1:2 w l t 'SOR - Version 2' ls 2\
+   , 'cacheres1.dat' u 1:2 w l t 'Residue - Version 1' ls 3\
+   , 'cacheres2.dat' u 1:2 w l t 'Residue - Version 2' ls 4
 
 
+---------------------------------------------
+DP MFLOP/s
 
+set title 'DP MFLOP/s'
 
-
-
-
-
-
-
-
-
-
-
-
-
-Randoms (Nao usar):
-
-plot 'membandwidthsor1.dat' u 1:2 w l t 'SOR - Version 1' lc rgb 'black', 'membandwidthres1.dat' u 1:2 w l t 'SOR - Version 2' lc rgb 'black', 'membandwidthsor2.dat' u 1:2 w l t 'Residue - Version 1' lc rgb 'membandwidthres2', 'gv2timeres.dat' u 1:2 w l t 'Residue - Version 2' lc rgb 'black'
-
-plot 'gv1timesor.dat' u 1:2 w l t 'SOR - Version 1' lc rgb 'black', 'gv2timesor.dat' u 1:2 w l t 'SOR - Version 2' lc rgb 'black', 'gv1timeres.dat' u 1:2 w l t 'Residue - Version 1' ls 'dashed' lc rgb 'black', 'gv2timeres.dat' u 1:2 w l t 'Residue - Version 2' lc rgb 'black'
-
-plot 'gv1timesor.dat' u 1:2 w l t 'SOR - Version 1' lc rgb 'black'\
-, 'gv2timesor.dat' u 1:2 w l t 'SOR - Version 2' lc rgb 'black'\
-, 'gv1timeres.dat' u 1:2 w l t 'Residue - Version 1' ls 'dashed' lc rgb 'black'\
-, 'gv2timeres.dat' u 1:2 w l t 'Residue - Version 2' lc rgb 'black'
-
-set style line 1 lt 2 lc rgb "red" lw 3
-set style line 2 lt 2 lc rgb "orange" lw 2
-set style line 3 lt 2 lc rgb "yellow" lw 3
-set style line 4 lt 2 lc rgb "green" lw 2
+plot 'dpmflopssor1.dat' u 1:2 w l t 'SOR - Version 1' ls 1\
+   , 'dpmflopssor2.dat' u 1:2 w l t 'SOR - Version 2' ls 2\
+   , 'dpmflopsres1.dat' u 1:2 w l t 'Residue - Version 1' ls 3\
+   , 'dpmflopsres2.dat' u 1:2 w l t 'Residue - Version 2' ls 4
