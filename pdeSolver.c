@@ -82,6 +82,7 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 	int i, j, k, l, m, row, inx, index, nxe;
 	double now, res, tRes, maxRes = 0, divided; // tRes is total residue in this iteration, maxRes is the biggest residue.
     double coef1, coef2, coef3, coef4;
+    e=0;
 
     coef1 = (1/(hx*hx)) - (1/(2*hx)); // u(i+1,j)
     coef2 = (1/(hx*hx)) + (1/(2*hx)); // u(i-1,j)
@@ -131,7 +132,7 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 }
 
 int main(int argc, char *argv[]) {
-	int e, i, j, nx, ny, maxI, alpha, n, a;
+	int e=0, i, j, nx, ny, maxI, alpha, n, a;
 	double hx, hy, w, beta, sigma, uDivisor, *x, *r, *fMem, timeSor, timeResNorm;
 	FILE *fpExit, *fpData;
 
@@ -142,11 +143,12 @@ int main(int argc, char *argv[]) {
 	w = 2 - ((hx + hy) / 2);
 	uDivisor = (2 / (hx * hx)) + (2 / (hy * hy)) + 4 * M_PI * M_PI;
 
-    for(e = 1, n = nx, a = 1, i = 0; i < 32; ++i) {
+    /*for(e = 1, n = nx, a = 1, i = 0; i < 32; ++i) {
         if(((n & a) != n) && ((n & a) != 0))
             e = 0;
         a = a << 1;
-    }
+    }*/
+    if(nx % 32 == 0) e = 1;
     printf("nx = %d, ny = %d, e = %d\n",nx,ny,e);
 
 	if((x = malloc((nx + e) * ny * sizeof(double))) == NULL) {
@@ -172,7 +174,7 @@ int main(int argc, char *argv[]) {
     timeResNorm = 0.0f;
 
 	for(i = 1; i < ny - 1; ++i) { // This 'for' has to ignore borders.
-        n = i*(nx+e);
+        n = i*nx;
 		for(j = 0; j < nx; ++j) { // This 'for' cant ignore borders.
 			x[n+j] = 0.0f;
 		}
@@ -189,7 +191,7 @@ int main(int argc, char *argv[]) {
 
 	// Initializing f(x,y)
     for(i=1; i<ny-1; ++i) { // Ignoring borders.
-        n = i * (nx+e);
+        n = i * nx;
         for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
             fMem[n+j] = f(i,j,hx,hy);
         }
@@ -206,7 +208,7 @@ int main(int argc, char *argv[]) {
 
 	for(i = 1; i < ny - 1; ++i) { // This 'for' has to ignore borders.
         beta = i*hy;
-        n = i*(nx+e);
+        n = i*nx;
 		for(j = 1; j < nx - 1; ++j) {
 			fprintf(fpData,"%.15lf %.15lf %.15lf\n",j*hx,beta,x[n+j]);
 		}
