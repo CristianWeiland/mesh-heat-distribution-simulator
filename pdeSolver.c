@@ -1,4 +1,96 @@
 #include "header.h"
+/*
+Banda de Memória: utilizar o grupo MEM do likwid, e apresentar o resultado de "Memory bandwidth [MBytes/s]";
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.05 -hy 0.05 -i 20 -o graph | grep "Memory bandwidth" | cut -c 39-50
+
+Cache miss: utilizar o grupo CACHE do likwid, e apresentar o resultado de "data cache miss ratio";
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.05 -hy 0.05 -i 20 -o graph
+
+Operações aritméticas: utilizar o grupo FLOPS_DP do likwid, e apresentar o resultado de "DP MFLOP/s";
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.05 -hy 0.05 -i 20 -o graph
+
+---------
+
+10 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o graph
+
+100 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o graph
+
+127 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o graph
+
+128 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o graph
+
+200 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o graph
+
+255 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 -o graph
+
+256 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o graph
+
+500 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph
+
+511 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 -o graph
+
+512 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 -o graph
+
+1000 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 20 -o graph
+
+1023 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 20 -o graph
+
+1024 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 -o graph
+
+2000 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i 20 -o graph
+
+2047 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i 20 -o graph
+
+2048 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 20 -o graph
+*/
 
 double timestamp(void) {
     struct timeval tp;
@@ -51,7 +143,7 @@ FILE* getParams(int argc, char* argv[], double *hx, double *hy, int *maxI) {
 
 inline double f(int i, int j, double hx, double hy) {
 /* f(x,y) = 4π²[ sin(2πx)sinh(πy) + sin(2π(π−x))sinh(π(π−y)) ] */
-	double x = j * hx, y = i * hy;
+	//double x = j * hx, y = i * hy;
 	return (4*M_PI*M_PI * ( (sin(2*M_PI*x)) * (sinh(M_PI*y)) + (sin(2*M_PI*(M_PI-x))) * (sinh(M_PI*(M_PI-y))) ));
 }
 
@@ -80,6 +172,7 @@ f(x,y) = 2/Δx²+2/Δy²+4π² * u(i,j) - (u(i+1,j) * 1/(Δx(Δx-2)) + u(i-1,j) 
 
 void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNorm, double w, double uDivisor, double hx, double hy, int nx, int ny, int maxI, int e) {
 	int i, j, k, l, m, row, inx, index, nxe;
+
 	double now, res, tRes, maxRes = 0, divided; // tRes is total residue in this iteration, maxRes is the biggest residue.
     double coef1, coef2, coef3, coef4;
     e=0;
@@ -88,11 +181,13 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
     coef2 = (1/(hx*hx)) + (1/(2*hx)); // u(i-1,j)
     coef3 = (1/(hy*hy)) - (1/(2*hy)); // u(i,j+1)
     coef4 = (1/(hy*hy)) + (1/(2*hy)); // u(i,j-1)
+
     nxe = nx + e;
     divided = 1 / uDivisor;
 
 	for(k=0; k<maxI; ++k) {
 		now = timestamp(); // Starting iteration time counter.
+		LIKWID_MARKER_START("sor");
 
         for(i=1; i<ny-1; i+=BLOCK_SIZE) {
             inx = i*nxe;
@@ -107,12 +202,14 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
             }
         }
 
+        LIKWID_MARKER_STOP("sor");
 		*timeSor += timestamp() - now; // Get iteration time.
 		now = timestamp(); // Start residue norm time counter.
+		LIKWID_MARKER_START("residue");
 
 		tRes = 0.0f;
 
-	    for(i=1; i<ny-1; ++i) { // Ignoring borders.
+	    for(i=1; i<ny-1; ++i) { // Ignoring borders
             index = i * nxe;
 	        for(j=1; j<nx-1; ++j) { // Ignoring borders as well.
 	            res = fMem[index+j] - subsRow(index+j,x,uDivisor,hx,hy,nxe,coef1,coef2,coef3,coef4);
@@ -124,6 +221,7 @@ void sor(double *x, double *r, double *fMem, double *timeSor, double *timeResNor
 
 		r[k] = sqrt(tRes); // Store the norm of the residue in a vector (r).
 
+        LIKWID_MARKER_STOP("residue");
 		*timeResNorm += timestamp() - now; // Get residue norm time.
 	}
 
@@ -138,8 +236,11 @@ int main(int argc, char *argv[]) {
 
 	fpExit = getParams(argc,argv,&hx,&hy,&maxI);
 
+    LIKWID_MARKER_INIT;
+
 	nx = (round(M_PI/hx)) + 1;
 	ny = (round(M_PI/hy)) + 1;
+	printf("Nx = %d, Ny = %d\n",nx,ny);
 	w = 2 - ((hx + hy) / 2);
 	uDivisor = (2 / (hx * hx)) + (2 / (hy * hy)) + 4 * M_PI * M_PI;
 
@@ -216,6 +317,8 @@ int main(int argc, char *argv[]) {
 
 	fclose(fpExit);
 	fclose(fpData);
+
+    LIKWID_MARKER_CLOSE;
 
 	return 0;
 }
