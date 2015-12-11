@@ -144,7 +144,7 @@ FILE* getParams(int argc, char* argv[], double *hx, double *hy, int *maxI) {
 inline double f(int x, int y) {
 /* f(x,y) = 4π²[ sin(2πx)sinh(πy) + sin(2π(π−x))sinh(π(π−y)) ] */
 	//double x = j * hx, y = i * hy;
-	return (4*M_PI*M_PI * ( (sin(2*M_PI*i)) * (sinh(M_PI*j)) + (sin(2*M_PI*(M_PI-i))) * (sinh(M_PI*(M_PI-j))) ));
+	return (4*M_PI*M_PI * ( (sin(2*M_PI*x)) * (sinh(M_PI*y)) + (sin(2*M_PI*(M_PI-x))) * (sinh(M_PI*(M_PI-y))) ));
 }
 
 inline double calcU(int n, double *u, double *fMem, double divided, double hx, double hy, int nx, double coef1, double coef2, double coef3, double coef4) {
