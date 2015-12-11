@@ -8,13 +8,13 @@
 
     #FLAGS = -DLIKWID_PERFMON -O3 -mavx -march=native -lm
     # Sem Likwid
-    FLAGS = -O3 -lm -march=native
+    #FLAGS = -O3 -lm -march=native
 
     # com Likwid
-    FLAGS = -DLIKWID_PERFMON -O3 -lm -march=native
+    FLAGS = -DLIKWID_PERFMON -O3 -lm -mavx -march=native
 
-    #INCLUDE = -I/home/soft/likwid/include
-    #LIKWID = -llikwid -L/usr/lib -L/home/soft/likwid/lib -DLIKWID_PERFMON
+    INCLUDE = -I/home/soft/likwid/include
+    LIKWID = -llikwid -L/usr/lib -L/home/soft/likwid/lib -DLIKWID_PERFMON
 
 .PHONY: all clean
 
