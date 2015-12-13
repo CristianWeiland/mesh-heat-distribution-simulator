@@ -242,7 +242,7 @@ int main(int argc, char *argv[]) {
 	w = 2 - ((hx + hy) / 2);
 	uDivisor = (2 / (hx * hx)) + (2 / (hy * hy)) + 4 * M_PI * M_PI;
 
-	if((x = malloc((nx + e) * ny * sizeof(double))) == NULL) {
+	if((x = malloc(nx * ny * sizeof(double))) == NULL) {
 		fprintf(stderr,"Could not allocate memory.");
 		exit(-5);
 	}
@@ -251,7 +251,7 @@ int main(int argc, char *argv[]) {
 		exit(-5);
 	}
 
-    if((fMem = malloc((nx + e) * ny * sizeof(double))) == NULL) {
+    if((fMem = malloc(nx * ny * sizeof(double))) == NULL) {
         fprintf(stderr,"Could not allocate memory.");
         exit(-5);
     }
