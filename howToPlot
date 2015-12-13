@@ -13,10 +13,10 @@ set termoption dash
 set grid
 set xlabel 'Points'
 set ylabel 'Time (seconds)'
-set style line 1 lt 1 lc rgb 'red' lw 2
-set style line 2 lt 1 lc rgb "orange" lw 2
-set style line 3 lt 2 lc rgb "yellow" lw 2
-set style line 4 lt 2 lc rgb "green" lw 2
+set style line 1 lt 1 lc rgb '#9ecae1' lw 2
+set style line 2 lt 1 lc rgb "#bdbdbd" lw 2
+set style line 3 lt 2 lc rgb '#3182bd' lw 2
+set style line 4 lt 2 lc rgb "#636363" lw 2
 
 --------------------------------------------
 Time:
