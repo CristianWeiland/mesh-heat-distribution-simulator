@@ -3,7 +3,6 @@ set grid
 set logscale x 2
 set logscale y 2
 set xlabel 'Points'
-set ylabel 'Time (seconds)'
 set title 'Data Cache Miss Ratio'
 set style line 1 lt 1 lc rgb '#9ecae1' lw 2
 set style line 2 lt 1 lc rgb "#bdbdbd" lw 2
