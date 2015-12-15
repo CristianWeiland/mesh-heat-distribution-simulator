@@ -15,3 +15,4 @@ plot 'time.dat' u 1:2 w l t 'Residue - Version 1' ls 3\
    , 'time.dat' u 1:4 w l t 'SOR - Version 1' ls 1\
    , 'time.dat' u 1:3 w l t 'Residue - Version 2' ls 4\
    , 'time.dat' u 1:5 w l t 'SOR - Version 2' ls 2
+pause -1
