@@ -1,0 +1,289 @@
+10 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o graph
+
+Result:
+SOR:
+	Time: 0.000297
+	Memory Bandwidth: 1.619730e+04
+	Data Cache Miss Ratio: 1.719345e-02
+	DP MFlOP/s: 3.279365e+02
+Residuo:
+	Time: 0.000295
+	Memory Bandwidth: 1.779971e+04
+	Data Cache Miss Ratio: 1.687931e-02
+	DP MFlOP/s: 3.416050e+02
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+100 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.002310
+	Memory Bandwidth: 3.829102e+02
+	Data Cache Miss Ratio: 1.194167e-03
+	DP MFlOP/s:8.087655e+02
+Residuo:
+	Time:0.001934
+	Memory Bandwidth: 3.768171e+02
+	Data Cache Miss Ratio: 1.268701e-03
+	DP MFlOP/s:9.656009e+02
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+127 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.003715
+	Memory Bandwidth:3.978275e+02
+	Data Cache Miss Ratio:1.093879e-03
+	DP MFlOP/s:8.948557e+02
+Residuo:
+	Time:0.003342
+	Memory Bandwidth:4.362378e+02
+	Data Cache Miss Ratio:1.098131e-03
+	DP MFlOP/s:9.917492e+02
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+128 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.003616
+	Memory Bandwidth:4.212521e+02
+	Data Cache Miss Ratio:9.156894e-04
+	DP MFlOP/s:8.418422e+02
+Residuo:
+	Time:0.003246
+	Memory Bandwidth:4.360278e+02
+	Data Cache Miss Ratio:1.002241e-03
+	DP MFlOP/s:9.337266e+02
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+200 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.008326
+	Memory Bandwidth:4.108838e+02
+	Data Cache Miss Ratio:7.725517e-04
+	DP MFlOP/s:8.882177e+02
+Residuo:
+	Time:0.007583
+	Memory Bandwidth:3.810756e+02
+	Data Cache Miss Ratio:7.828366e-04
+	DP MFlOP/s:9.707222e+02
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+255 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.013354
+	Memory Bandwidth:3.862520e+02
+	Data Cache Miss Ratio:1.253632e-03
+	DP MFlOP/s:8.984721e+02
+Residuo:
+	Time:0.012168
+	Memory Bandwidth:3.874120e+02
+	Data Cache Miss Ratio:1.220100e-03
+	DP MFlOP/s:9.810839e+02
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+256 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.013252
+	Memory Bandwidth:3.873149e+02
+	Data Cache Miss Ratio:1.332275e-03
+	DP MFlOP/s:9.176340e+02
+Residuo:
+	Time:0.012253
+	Memory Bandwidth:3.796060e+02
+	Data Cache Miss Ratio:1.245257e-03
+	DP MFlOP/s:9.873832e+02
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+500 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.049730
+	Memory Bandwidth:4.638628e+02
+	Data Cache Miss Ratio:1.155280e-03
+	DP MFlOP/s:9.275850e+02
+Residuo:
+	Time:0.046418
+	Memory Bandwidth:4.763581e+02
+	Data Cache Miss Ratio:1.140699e-03
+	DP MFlOP/s:9.883993e+02
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+511 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.051865
+	Memory Bandwidth:5.385358e+02
+	Data Cache Miss Ratio:1.986409e-03
+	DP MFlOP/s:9.292904e+02
+Residuo:
+	Time:0.048035
+	Memory Bandwidth:3.882145e+02
+	Data Cache Miss Ratio:1.932972e-03
+	DP MFlOP/s:9.980287e+02
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+512 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.053218
+	Memory Bandwidth:5.314457e+02
+	Data Cache Miss Ratio:3.108666e-03
+	DP MFlOP/s:9.099833e+02
+Residuo:
+	Time:0.049579
+	Memory Bandwidth:4.019147e+02
+	Data Cache Miss Ratio:3.231441e-03
+	DP MFlOP/s:9.715378e+02
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+1000 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.195197
+	Memory Bandwidth:4.412162e+02
+	Data Cache Miss Ratio:1.953739e-03
+	DP MFlOP/s:9.427951e+02
+Residuo:
+	Time:0.180556
+	Memory Bandwidth:4.341473e+02
+	Data Cache Miss Ratio:1.967067e-03
+	DP MFlOP/s:1.013719e+03
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+1023 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.229308
+	Memory Bandwidth:4.315215e+02
+	Data Cache Miss Ratio:2.595456e-03
+	DP MFlOP/s:8.391381e+02
+Residuo:
+	Time:0.217192
+	Memory Bandwidth:4.462077e+02
+	Data Cache Miss Ratio:2.582323e-03
+	DP MFlOP/s:8.811371e+02
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+1024 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.205620
+	Memory Bandwidth:5.651425e+02
+	Data Cache Miss Ratio:9.227765e-04
+	DP MFlOP/s:9.388747e+02
+Residuo:
+	Time:0.190238
+	Memory Bandwidth:6.757122e+02
+	Data Cache Miss Ratio:2.553477e-03
+	DP MFlOP/s:1.009309e+03
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+2000 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.772440
+	Memory Bandwidth:4.496510e+02
+	Data Cache Miss Ratio:1.885395e-03
+	DP MFlOP/s:9.524161e+02
+Residuo:
+	Time:0.716187
+	Memory Bandwidth:4.366796e+02
+	Data Cache Miss Ratio:1.921168e-03
+	DP MFlOP/s:1.021636e+03
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+2047 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.809721
+	Memory Bandwidth:4.516483e+02
+	Data Cache Miss Ratio:2.487427e-03
+	DP MFlOP/s:9.510150e+02
+Residuo:
+	Time:0.749794
+	Memory Bandwidth:4.481116e+02
+	Data Cache Miss Ratio:2.480431e-03
+	DP MFlOP/s:1.022546e+03
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+2048 Pontos
+likwid-perfctr -f -C 1 -g MEM -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 20 -o graph
+likwid-perfctr -f -C 1 -g CACHE -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 20 -o graph
+likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 20 -o graph
+
+Result:
+SOR:
+	Time:0.813544
+	Memory Bandwidth:4.636085e+02
+	Data Cache Miss Ratio:2.634287e-03
+	DP MFlOP/s:9.492556e+02
+Residuo:
+	Time:0.752515
+	Memory Bandwidth:4.552954e+02
+	Data Cache Miss Ratio:2.668889e-03
+	DP MFlOP/s:1.018746e+03
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/

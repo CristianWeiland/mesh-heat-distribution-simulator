@@ -1,0 +1,58 @@
+General Options:
+
+set termoption dash
+set grid
+set logscale x 2
+set logscale y 2
+set xlabel 'Points'
+set style line 1 lt 1 lc rgb '#9ecae1' lw 2
+set style line 2 lt 1 lc rgb "#bdbdbd" lw 2
+set style line 3 lt 2 lc rgb '#3182bd' lw 2
+set style line 4 lt 2 lc rgb "#636363" lw 2
+
+--------------------------------------------
+Time:
+
+set key left box
+set title 'Time'
+set ylabel 'Time (seconds)'
+
+plot 'timesor1.dat' u 1:2 w l t 'SOR - Version 1' ls 1\
+   , 'timesor2.dat' u 1:2 w l t 'SOR - Version 2' ls 2\
+   , 'timeres1.dat' u 1:2 w l t 'Residue - Version 1' ls 3\
+   , 'timeres2.dat' u 1:2 w l t 'Residue - Version 2' ls 4
+
+---------------------------------------------
+Memory Bandwidth
+
+set key right box
+set title 'Memory Bandwidth [MBytes/s]'
+set ylabel 'MBytes/s'
+
+plot 'membandwidthsor1.dat' u 1:2 w l t 'SOR - Version 1' ls 1\
+   , 'membandwidthsor2.dat' u 1:2 w l t 'SOR - Version 2' ls 2\
+   , 'membandwidthres1.dat' u 1:2 w l t 'Residue - Version 1' ls 3\
+   , 'membandwidthres2.dat' u 1:2 w l t 'Residue - Version 2' ls 4
+
+
+---------------------------------------------
+Data Cache Miss Ratio
+
+set title 'Data Cache Miss Ratio'
+
+plot 'cachesor1.dat' u 1:2 w l t 'SOR - Version 1' ls 1\
+   , 'cachesor2.dat' u 1:2 w l t 'SOR - Version 2' ls 2\
+   , 'cacheres1.dat' u 1:2 w l t 'Residue - Version 1' ls 3\
+   , 'cacheres2.dat' u 1:2 w l t 'Residue - Version 2' ls 4
+
+
+---------------------------------------------
+DP MFLOP/s
+
+set title 'DP MFLOP/s'
+set ylabel 'DP MFLOP/s'
+
+plot 'dpmflopssor1.dat' u 1:2 w l t 'SOR - Version 1' ls 1\
+   , 'dpmflopssor2.dat' u 1:2 w l t 'SOR - Version 2' ls 2\
+   , 'dpmflopsres1.dat' u 1:2 w l t 'Residue - Version 1' ls 3\
+   , 'dpmflopsres2.dat' u 1:2 w l t 'Residue - Version 2' ls 4
