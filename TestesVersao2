@@ -6,16 +6,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.34 -hy 0.34 -i 20 -o gra
 
 Result:
 SOR
-	Time: 0.000140
-	Memory Bandwidth: 1.007957e+04
-	Data Cache Miss Ratio: 9.412551e-02
-	DP MFLOP/s: 1.447379e+02
+	Time: 0.000191
+	Memory Bandwidth: 1.461502e+04
+	Data Cache Miss Ratio: 9.161644e-02
+	DP MFLOP/s: 1.229060e+02
 
 Residue
-	Time: 0.000132
-	Memory Bandwidth: 2.295315e+04
-	Data Cache Miss Ratio: 9.167250e-02
-	DP MFLOP/s: 2.008486e+02
+	Time: 0.000180
+	Memory Bandwidth: 2.118577e+04
+	Data Cache Miss Ratio: 9.401162e-02
+	DP MFLOP/s: 2.307667e+02
 
 
 
@@ -27,16 +27,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0317 -hy 0.0317 -i 20 -o
 
 Result:
 SOR
-	Time: 0.000202
-	Memory Bandwidth: 1.240943e+04
-	Data Cache Miss Ratio: 2.432181e-02
-	DP MFLOP/s: 3.411563e+02
+	Time: 0.000235
+	Memory Bandwidth: 1.098220e+03
+	Data Cache Miss Ratio: 3.146997e-02
+	DP MFLOP/s: 3.041841e+02
 
 Residue
-	Time: 0.000097
-	Memory Bandwidth: 2.320394e+04
-	Data Cache Miss Ratio: 4.118495e-02
-	DP MFLOP/s: 9.004255e+02
+	Time: 0.000196
+	Memory Bandwidth: 1.553729e+03
+	Data Cache Miss Ratio: 4.132980e-02
+	DP MFLOP/s: 7.171942e+02
 
 
 
@@ -49,16 +49,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.025 -hy 0.025 -i 20 -o g
 
 Result:
 SOR
-	Time: 0.000177
-	Memory Bandwidth: 4.497731e+02
-	Data Cache Miss Ratio: 2.370301e-02
-	DP MFLOP/s: 3.220837e+02
+	Time: 0.000174
+	Memory Bandwidth: 1.429123e+03
+	Data Cache Miss Ratio: 2.965887e-02
+	DP MFLOP/s: 4.392454e+02
 
 Residue
-	Time: 0.000078
-	Memory Bandwidth: 7.438936e+02
-	Data Cache Miss Ratio: 4.031123e-02
-	DP MFLOP/s: 8.503135e+02
+	Time: 0.000133
+	Memory Bandwidth: 1.812929e+03
+	Data Cache Miss Ratio: 4.050730e-02
+	DP MFLOP/s: 1.070806e+03
 
 
 
@@ -71,16 +71,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0248 -hy 0.0248 -i 20 -o
 
 Result:
 SOR
-	Time: 0.000194
-	Memory Bandwidth: 9.235842e+02
-	Data Cache Miss Ratio: 2.360449e-02
-	DP MFLOP/s: 5.199345e+02
+	Time: 0.000176
+	Memory Bandwidth: 1.376020e+03
+	Data Cache Miss Ratio: 3.077636e-02
+	DP MFLOP/s: 4.648300e+02
 
 Residue
-	Time: 0.000077
-	Memory Bandwidth: 1.617785e+03
-	Data Cache Miss Ratio: 4.227584e-02
-	DP MFLOP/s: 1.377613e+03
+	Time: 0.000145
+	Memory Bandwidth: 1.963666e+03
+	Data Cache Miss Ratio: 4.230558e-02
+	DP MFLOP/s: 1.024821e+03
 
 
 
@@ -92,16 +92,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0158 -hy 0.0158 -i 20 -o
 
 Result:
 SOR
-	Time: 0.000355
-	Memory Bandwidth: 7.799725e+02
-	Data Cache Miss Ratio: 2.346966e-02
-	DP MFLOP/s: 5.105652e+02
+	Time: 0.000253
+	Memory Bandwidth: 3.684640e+02
+	Data Cache Miss Ratio: 3.032156e-02
+	DP MFLOP/s: 5.283490e+02
 
 Residue
-	Time: 0.000114
-	Memory Bandwidth: 1.084110e+03
-	Data Cache Miss Ratio: 3.915971e-02
-	DP MFLOP/s: 1.335525e+03
+	Time: 0.000176
+	Memory Bandwidth: 4.107457e+02
+	Data Cache Miss Ratio: 3.910918e-02
+	DP MFLOP/s: 1.204398e+03
 
 
 
@@ -113,16 +113,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.01235 -hy 0.01235 -i 20 
 
 Result:
 SOR
-	Time: 0.000566
-	Memory Bandwidth: 6.773897e+03
-	Data Cache Miss Ratio: 3.048646e-02
-	DP MFLOP/s: 4.984077e+02
+	Time: 0.000283
+	Memory Bandwidth: 5.137056e+03
+	Data Cache Miss Ratio: 4.222498e-02
+	DP MFLOP/s: 5.590089e+02
 
 Residue
-	Time: 0.000159
-	Memory Bandwidth: 7.940529e+03
-	Data Cache Miss Ratio: 4.035269e-02
-	DP MFLOP/s: 1.391218e+03
+	Time: 0.000158
+	Memory Bandwidth: 5.662193e+03
+	Data Cache Miss Ratio: 4.140578e-02
+	DP MFLOP/s: 1.358421e+03
 
 
 
@@ -134,16 +134,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0123 -hy 0.0123 -i 20 -o
 
 Result:
 SOR
-	Time: 0.000568
-	Memory Bandwidth: 6.212922e+03
-	Data Cache Miss Ratio: 2.831647e-02
-	DP MFLOP/s: 5.008122e+02
+	Time: 0.000294
+	Memory Bandwidth: 7.551063e+03
+	Data Cache Miss Ratio: 3.946585e-02
+	DP MFLOP/s: 5.217203e+02
 
 Residue
-	Time: 0.000157
-	Memory Bandwidth: 7.468366e+03
-	Data Cache Miss Ratio: 4.404526e-02
-	DP MFLOP/s: 1.379471e+03
+	Time: 0.000158
+	Memory Bandwidth: 8.389336e+03
+	Data Cache Miss Ratio: 4.179030e-02
+	DP MFLOP/s: 1.389263e+03
 
 
 
@@ -155,16 +155,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0063 -hy 0.0063 -i 20 -o
 
 Result:
 SOR
-	Time: 0.001982
-	Memory Bandwidth: 5.060868e+02
-	Data Cache Miss Ratio: 2.411791e-02
-	DP MFLOP/s: 5.190291e+02
+	Time: 0.000920
+	Memory Bandwidth: 3.493977e+02
+	Data Cache Miss Ratio: 3.230385e-02
+	DP MFLOP/s: 5.758265e+02
 
 Residue
-	Time: 0.000476
-	Memory Bandwidth: 4.136519e+02
-	Data Cache Miss Ratio: 4.232655e-02
-	DP MFLOP/s: 1.417728e+03
+	Time: 0.000464
+	Memory Bandwidth: 3.198826e+02
+	Data Cache Miss Ratio: 4.344641e-02
+	DP MFLOP/s: 1.392780e+03
 
 
 
@@ -177,16 +177,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00616 -hy 0.00616 -i 20 
 
 Result:
 SOR
-	Time: 0.003423
-	Memory Bandwidth: 3.910980e+02
-	Data Cache Miss Ratio: 1.249207e-01
-	DP MFLOP/s: 3.023504e+02
+	Time: 0.002451
+	Memory Bandwidth: 3.145836e+02
+	Data Cache Miss Ratio: 1.959652e-01
+	DP MFLOP/s: 2.077014e+02
 
 Residue
-	Time: 0.000574
-	Memory Bandwidth: 3.890882e+02
-	Data Cache Miss Ratio: 7.374434e-02
-	DP MFLOP/s: 1.148963e+03
+	Time: 0.000563
+	Memory Bandwidth: 2.987755e+02
+	Data Cache Miss Ratio: 8.120528e-02
+	DP MFLOP/s: 1.155714e+03
 
 
 
@@ -199,16 +199,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00615 -hy 0.00615 -i 20 
 
 Result:
 SOR
-	Time: 0.004417
-	Memory Bandwidth: 3.975009e+02
-	Data Cache Miss Ratio: 2.092028e-01
-	DP MFLOP/s: 2.367900e+02
+	Time: 0.003400
+	Memory Bandwidth: 3.053923e+02
+	Data Cache Miss Ratio: 2.978812e-01
+	DP MFLOP/s: 1.572840e+02
 
 Residue
-	Time: 0.000598
-	Memory Bandwidth: 3.981432e+02
-	Data Cache Miss Ratio: 8.294147e-02
-	DP MFLOP/s: 1.144478e+03
+	Time: 0.000596
+	Memory Bandwidth: 3.128584e+02
+	Data Cache Miss Ratio: 9.774595e-02
+	DP MFLOP/s: 1.121439e+03
 
 
 
@@ -221,16 +221,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.003145 -hy 0.003145 -i 2
 
 Result:
 SOR
-	Time: 0.008146
-	Memory Bandwidth: 3.334609e+03
-	Data Cache Miss Ratio: 2.950550e-02
-	DP MFLOP/s: 4.909609e+02
+	Time: 0.004478
+	Memory Bandwidth: 5.431448e+03
+	Data Cache Miss Ratio: 3.874979e-02
+	DP MFLOP/s: 4.209964e+02
 
 Residue
-	Time: 0.003774
-	Memory Bandwidth: 6.536244e+03
-	Data Cache Miss Ratio: 9.187801e-02
-	DP MFLOP/s: 6.335770e+02
+	Time: 0.003740
+	Memory Bandwidth: 6.520833e+03
+	Data Cache Miss Ratio: 9.180973e-02
+	DP MFLOP/s: 6.285020e+02
 
 
 
@@ -243,16 +243,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.003073 -hy 0.003073 -i 2
 
 Result:
 SOR
-	Time: 0.013825
-	Memory Bandwidth: 2.254284e+03
-	Data Cache Miss Ratio: 1.237276e-01
-	DP MFLOP/s: 3.046950e+02
+	Time: 0.009074
+	Memory Bandwidth: 3.028458e+03
+	Data Cache Miss Ratio: 1.696582e-01
+	DP MFLOP/s: 2.296245e+02
 
 Residue
 	Time: 0.003997
-	Memory Bandwidth: 6.419650e+03
-	Data Cache Miss Ratio: 9.549587e-02
-	DP MFLOP/s: 6.204512e+02
+	Memory Bandwidth: 6.382852e+03
+	Data Cache Miss Ratio: 9.462145e-02
+	DP MFLOP/s: 6.238536e+02
 
 
 
@@ -265,16 +265,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.00307 -hy 0.00307 -i 20 
 
 Result:
 SOR
-	Time: 0.017605
-	Memory Bandwidth: 1.839885e+03
-	Data Cache Miss Ratio: 1.869319e-01
-	DP MFLOP/s: 2.385549e+02
+	Time: 0.012573
+	Memory Bandwidth: 2.201892e+03
+	Data Cache Miss Ratio: 2.827231e-01
+	DP MFLOP/s: 1.657229e+02
 
 Residue
-	Time: 0.004082
-	Memory Bandwidth: 6.200531e+03
-	Data Cache Miss Ratio: 9.727541e-02
-	DP MFLOP/s: 6.099872e+02
+	Time: 0.003975
+	Memory Bandwidth: 6.234260e+03
+	Data Cache Miss Ratio: 9.706773e-02
+	DP MFLOP/s: 6.179135e+02
 
 
 
@@ -287,16 +287,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0015715 -hy 0.0015715 -i
 
 Result:
 SOR
-	Time: 0.032355
-	Memory Bandwidth: 3.748434e+03
-	Data Cache Miss Ratio: 2.925384e-02
-	DP MFLOP/s: 4.933160e+02
+	Time: 0.019143
+	Memory Bandwidth: 5.566840e+03
+	Data Cache Miss Ratio: 3.810687e-02
+	DP MFLOP/s: 4.191378e+02
 
 Residue
-	Time: 0.011399
-	Memory Bandwidth: 6.716217e+03
-	Data Cache Miss Ratio: 9.262099e-02
-	DP MFLOP/s: 8.375121e+02
+	Time: 0.011272
+	Memory Bandwidth: 6.658985e+03
+	Data Cache Miss Ratio: 9.245880e-02
+	DP MFLOP/s: 8.371794e+02
 
 
 
@@ -309,16 +309,16 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.0015355 -hy 0.0015355 -i
 
 Result:
 SOR
-	Time: 0.055417
-	Memory Bandwidth: 2.461350e+03
-	Data Cache Miss Ratio: 1.241280e-01
-	DP MFLOP/s: 3.025465e+02
+	Time: 0.036492
+	Memory Bandwidth: 3.273346e+03
+	Data Cache Miss Ratio: 1.680699e-01
+	DP MFLOP/s: 2.225165e+02
 
 Residue
-	Time: 0.012243
-	Memory Bandwidth: 6.990283e+03
-	Data Cache Miss Ratio: 9.543078e-02
-	DP MFLOP/s: 8.052487e+02
+	Time: 0.012149
+	Memory Bandwidth: 7.000523e+03
+	Data Cache Miss Ratio: 9.478434e-02
+	DP MFLOP/s: 7.575086e+02
 
 
 
@@ -331,15 +331,15 @@ likwid-perfctr -f -C 1 -g FLOPS_DP -m ./pdeSolver -hx 0.001535 -hy 0.001535 -i 2
 
 Result:
 SOR
-	Time: 0.069957
-	Memory Bandwidth: 1.995682e+03
-	Data Cache Miss Ratio: 1.869591e-01
-	DP MFLOP/s: 2.398127e+02
+	Time: 0.050385
+	Memory Bandwidth: 2.456435e+03
+	Data Cache Miss Ratio: 2.815086e-01
+	DP MFLOP/s: 1.652671e+02
 
 Residue
-	Time: 0.012756
-	Memory Bandwidth: 6.563676e+03
-	Data Cache Miss Ratio: 9.750622e-02
-	DP MFLOP/s: 7.734637e+02
+	Time: 0.012375
+	Memory Bandwidth: 6.563010e+03
+	Data Cache Miss Ratio: 9.788533e-02
+	DP MFLOP/s: 7.924652e+02
 
 
